@@ -1,0 +1,12 @@
+{
+  "name": "fansai-branding-v1",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Offline FansAI chart and glass UI demo",
+  "scripts": {
+    "test": "node tests/data.test.cjs",
+    "test:browser": "node tests/browser.cjs"
+  },
+  "engines": { "node": ">=20" },
+  "devDependencies": { "playwright": "1.65.0" }
+}

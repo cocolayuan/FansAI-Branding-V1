@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#eaf2f3">
+  <meta name="description" content="FansAI 数据中台：清透玻璃、回报曲线与渠道图表的交互演示。">
+  <title>FansAI — Data in motion</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="controls.css">
+  <script>try { document.documentElement.dataset.theme = localStorage.getItem('fansai-chart-theme') || 'light'; } catch (_) {}</script>
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"><i></i><i></i><i></i><span>FANSAI</span></div>
+  <a href="#main" class="skip-link">跳到图表</a>
+  <header class="masthead">
+    <a class="brand" href="#"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M3 22V12h6v10zm8 0V7h6v15zm8 0V2h6v20z" fill="currentColor"/></svg><strong>FansAI<span>Data platform</span></strong></a>
+    <div class="header-actions"><span class="demo-label">Demo</span><button id="themeButton" class="icon-button" aria-label="切换为深色模式" title="切换明暗主题"></button><a class="icon-button" href="https://github.com/cocolayuan/FansAI-Branding-V1" aria-label="查看 GitHub 仓库"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5 2 12l7 7m6-14 7 7-7 7"/></svg></a></div>
+  </header>
+  <main id="main">
+    <div class="page-title"><div><p class="kicker">数据，清晰可见。</p><h1>投资回报<span class="title-dot">.</span></h1></div><button id="replayButton" class="quiet-button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg>重播动效</button></div>
+    <div class="toolbar" aria-label="图表筛选">
+      <div class="filter-pills"><button id="periodButton" class="filter-pill"><span id="periodLabel">近 7 天</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7 5 5 5-5"/></svg></button><span id="rangeLabel" class="range-label">10/23—10/29</span><button id="channelButton" class="filter-pill"><span id="channelLabel">全部渠道</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7 5 5 5-5"/></svg></button></div>
+      <button id="openFilters" class="filter-action" aria-label="打开看板筛选"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18M3 17h18M8 3v8M16 13v8"/></svg><span>筛选</span></button>
+    </div>
+    <div class="roi-layout">
+      <section class="overview glass-card" aria-labelledby="profitTitle">
+        <div class="card-eyebrow"><h2 id="profitTitle">经营利润</h2><span class="live-label" id="selectionLabel">区间整体</span></div>
+        <div class="profit-value" id="profitValue" aria-live="polite"></div>
+        <div class="roi-inline"><span>ROI</span><strong id="roiValue"></strong><span id="returnStatus" class="status-badge"></span></div>
+        <div class="glass-columns" role="img" aria-label="成本和收入对比">
+          <div class="column-unit"><div class="glass-column" id="costColumn"><div class="column-cap"></div><div class="column-shine"></div></div><span>成本</span></div>
+          <div class="column-unit"><div class="glass-column" id="revenueColumn"><div class="column-cap"></div><div class="column-shine"></div></div><span>收入</span></div>
+        </div>
+        <div class="ledger"><div><span>税前收入</span><strong id="revenueValue"></strong></div><div><span>总成本</span><strong id="costValue"></strong></div></div>
+        <button class="reset-selection" id="resetDay" hidden>返回区间整体 <span>↗</span></button>
+      </section>
+      <section class="trend glass-card" aria-labelledby="trendTitle">
+        <div class="card-top"><h2 id="trendTitle">回报走势</h2><div class="segmented" role="group" aria-label="趋势指标"><button data-metric="roi" aria-pressed="true">ROI</button><button data-metric="profit" aria-pressed="false">经营利润</button></div></div>
+        <div class="chart-caption"><span id="trendCaption">近 7 天</span><button id="autoButton" class="auto-button" aria-pressed="false" aria-label="开启每5秒切换日期">自动轮播 <span aria-hidden="true">▷</span></button></div>
+        <div id="roiChart" class="chart roi-chart" aria-label="回报走势图"></div>
+        <div class="day-picker" id="dayPicker" role="group" aria-label="选择查看日期"></div>
+        <div class="trend-stats"><div><span>盈利天数</span><strong id="profitDays"></strong><small>完整日期</small></div><div><span>最高 ROI</span><strong id="maxRoi" class="text-teal"></strong><small id="maxDate"></small></div><div><span>最低 ROI</span><strong id="minRoi" class="text-orange"></strong><small id="minDate"></small></div></div>
+      </section>
+    </div>
+    <div class="section-heading"><h2>每一份投入，都看得见<span>.</span></h2><span>渠道与效率</span></div>
+    <div class="marketing-layout">
+      <section class="marketing-card" aria-labelledby="marketingTitle">
+        <div class="card-top"><h2 id="marketingTitle">营销支出</h2><span id="marketingRange">近 7 天</span></div>
+        <div class="marketing-numbers"><strong id="marketingValue"></strong><div><span>整体 CPI</span><strong id="cpiValue"></strong></div></div>
+        <div class="chart marketing-chart" id="marketingChart" aria-label="渠道营销支出与CPI"></div>
+        <div class="chart-legend" id="marketingLegend"></div>
+        <div class="marketing-stats"><div><span>日均</span><strong id="averageMarketing"></strong></div><div><span>最高一天</span><strong id="highestMarketing"></strong><small id="highestMarketingDate"></small></div><div><span>下载</span><strong id="downloadValue"></strong></div></div>
+      </section>
+      <aside class="support-column">
+        <section class="revenue-card glass-card" aria-labelledby="revenueTitle"><div class="card-top"><h2 id="revenueTitle">总收入</h2><span class="period-short" id="revenueRange">近 7 天</span></div><div id="dotNumber" class="dot-number" role="img"></div><div class="mini-chart" id="revenueMiniChart"></div><div class="revenue-bottom"><span>税前收入</span><span id="revenueSelectedDay">区间整体</span></div></section>
+        <section class="channel-card glass-card" aria-labelledby="channelTitle"><h2 id="channelTitle">渠道构成</h2><div id="channelList"></div></section>
+      </aside>
+    </div>
+    <div class="sr-only" id="chartAnnouncement" aria-live="polite"></div>
+    <details class="data-details"><summary>查看数据与口径</summary><p>离线演示数据，统计范围为 2026/10/23—10/29。ROI = 收入 ÷（营销 + 算力）× 100%；CPI = 营销支出 ÷ 下载。日均、最高及最低统计仅包含完整日期，10/29 为累计中。选择日期会联动概览，所有图表的合计来自逐日记录。</p><div class="table-scroll"><table><caption>当前筛选的逐日明细</caption><thead><tr><th>日期</th><th>收入</th><th>成本</th><th>利润</th><th>ROI</th><th>CPI</th></tr></thead><tbody id="dataRows"></tbody></table></div></details>
+  </main>
+  <footer><span>FansAI · Data in motion</span><a href="README.md">设计参考与说明</a></footer>
+  <script src="data.js"></script><script src="controls.js"></script><script src="app.js"></script>
+</body>
+</html>

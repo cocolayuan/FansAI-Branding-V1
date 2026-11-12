@@ -1,0 +1,50 @@
+{
+  "runtime": "@rive-app/canvas@2.49.4",
+  "license": "runtime/LICENSE",
+  "files": {
+    "build/fansai-glass-tabs.riv": {
+      "bytes": 1643563,
+      "sha256": "a0f48ae07604288ce34198e31346de35f2345c0ceffe4f3cb41f9c4728eec56b"
+    },
+    "scene.rml": {
+      "bytes": 121357,
+      "sha256": "d12213b68f044e32d15007433a5b6301a5848c9fce3948c563c2be4d36f3ac2b"
+    },
+    "generate.mjs": {
+      "bytes": 9346,
+      "sha256": "bdd7881ca66a95a25a206782755212f06afa5c9c3dc21ba5e314dce62d615f44"
+    },
+    "rive.yaml": {
+      "bytes": 174,
+      "sha256": "0fbb435b970050dc7dd6298de0372581be8b786b4e253705df4f1aaf45ac22f0"
+    },
+    "assets/approved-atlas.png": {
+      "bytes": 1624840,
+      "sha256": "88cf252bc215c5f1f49d467f789f7e8ef847466bb421d4c6569d9e52d326cb93"
+    },
+    "runtime/rive.js": {
+      "bytes": 678086,
+      "sha256": "bdd471f39a2133e775cfa2d6815ceb6b2670ced8fb6df4b142bd59d878dc12b8"
+    },
+    "runtime/rive.js.map": {
+      "bytes": 924592,
+      "sha256": "dbf7a737e761fc7328542bb03a5acf7997c2d16938b0a83b9c46d49b8509028a"
+    },
+    "runtime/rive.wasm": {
+      "bytes": 2243480,
+      "sha256": "43d09f2c8aa011e7b41003c1f4d4763b80ee2409c166c1cd40b4f65b55c4445a"
+    },
+    "runtime/LICENSE": {
+      "bytes": 1066,
+      "sha256": "8a1efa755d19446b51a18e1c15f6308728da0b36283c4d38050698ad6954b69a"
+    },
+    "integration/glass-nav.js": {
+      "bytes": 10956,
+      "sha256": "fb126e8536cd6c8da12f94bc26097eda9f9dea566351931d2b55c43de1fdd6ff"
+    },
+    "integration/glass-nav.css": {
+      "bytes": 7899,
+      "sha256": "f6ae1af0a9c1a3d0872b3fb213d16d1ad11ad7b64a00a71e6e9ea088c72236c8"
+    }
+  }
+}

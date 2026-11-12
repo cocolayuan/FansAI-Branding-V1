@@ -1,0 +1,13 @@
+{
+  "name": "FansAI Growth · 青蓝优化版",
+  "version": "2026-11-12",
+  "file": "index.html",
+  "sha256": "7c28732e501d06742ca346a7726e6c4a3ea7ea1ae303294040936cf2260683fc",
+  "rive": {
+    "file": "../rive/build/fansai-glass-tabs.riv",
+    "embedded": true,
+    "sha256": "a0f48ae07604288ce34198e31346de35f2345c0ceffe4f3cb41f9c4728eec56b"
+  },
+  "runtime": "@rive-app/canvas@2.49.4",
+  "offline": true
+}

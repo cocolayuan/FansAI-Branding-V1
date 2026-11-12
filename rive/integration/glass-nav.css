@@ -1,0 +1,102 @@
+/* Compact floating navigation. Layout follows iPhone Liquid Glass proportions; Rive poses are unchanged. */
+.fansai-mobile-scope .app{padding-bottom:calc(98px + env(safe-area-inset-bottom,0px))!important}
+.fansai-mobile-scope.secondary-page .app{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))!important}
+.fansai-mobile-scope nav.tb.fg-nav{
+  --fg-blur:23px;--fg-ink:#153f53;--fg-muted:#657681;--fg-border:rgba(255,255,255,.82);
+  --fg-surface:linear-gradient(135deg,rgba(255,255,255,.82),rgba(236,246,251,.68) 55%,rgba(255,255,255,.8));
+  --fg-shadow:inset 0 1px 1px #fffffff0,inset 0 -1px 2px #a6c1cf30,0 8px 24px -12px #1a38464d;
+  --fg-inner:rgba(255,255,255,.5);--fg-sheen:rgba(255,255,255,.38);color-scheme:light;
+  position:fixed;left:50%;right:auto;transform:translateX(-50%);
+  width:min(calc(100% - 32px),400px);height:64px;
+  bottom:calc(10px + env(safe-area-inset-bottom,0px));
+  display:grid;gap:0;padding:4px 7px;
+  border:1px solid var(--fg-border);border-radius:33px;
+  background:var(--fg-surface);
+  -webkit-backdrop-filter:blur(var(--fg-blur)) saturate(145%);
+  backdrop-filter:blur(var(--fg-blur)) saturate(145%);
+  box-shadow:var(--fg-shadow);
+  transition:background 180ms ease,border-color 180ms ease,box-shadow 180ms ease;
+  isolation:isolate;overflow:visible;z-index:30;
+}
+.fansai-mobile-scope nav.tb.fg-nav::before{
+  content:"";position:absolute;inset:2px;border-radius:inherit;
+  border:1px solid var(--fg-inner);pointer-events:none;z-index:-1;
+  box-shadow:none;
+}
+.fansai-mobile-scope nav.tb.fg-nav::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
+  background:linear-gradient(160deg,var(--fg-sheen),transparent 22% 78%,var(--fg-sheen));
+}
+.fg-light-clip{position:absolute;inset:1px;overflow:hidden;border-radius:inherit;pointer-events:none;z-index:0}
+.fg-light{position:absolute;width:86px;height:74px;left:0;top:-10px;opacity:0;pointer-events:none;
+  background:radial-gradient(ellipse,rgba(255,255,255,.95),rgba(185,229,249,.36) 38%,transparent 70%);filter:blur(5px);will-change:transform,opacity}
+.fansai-mobile-scope nav.tb.fg-nav button,
+.fansai-mobile-scope.growth-studio nav.tb.fg-nav button.on{
+  position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-width:0;min-height:54px;height:54px;padding:0;margin:0;gap:0;
+  border:0;border-radius:0;background:transparent!important;box-shadow:none!important;
+  color:var(--fg-muted);font:400 11px/14px geistSans,-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  transform:none!important;transition:color 170ms;outline:none;z-index:1;
+}
+.fansai-mobile-scope nav.tb.fg-nav button.on,
+.fansai-mobile-scope.growth-studio nav.tb.fg-nav button.on{color:var(--fg-ink);font-weight:650}
+.fansai-mobile-scope nav.tb.fg-nav button[hidden]{display:none!important}
+.fansai-mobile-scope nav.tb.fg-nav button:focus-visible::after{
+  content:"";position:absolute;inset:1px 5px 0;border-radius:26px;
+  border:2px solid #317fa1;outline:2px solid rgba(255,255,255,.92);pointer-events:none;
+}
+.fg-label{display:block;line-height:14px;white-space:nowrap;background:none!important;border:0!important;
+  border-radius:0!important;box-shadow:none!important;padding:0!important;margin:0!important;position:relative;z-index:2}
+.fg-icon{position:relative;display:block;width:34.46px;height:40px;flex:0 0 40px;pointer-events:none}
+.fg-rive-canvas{position:absolute;inset:0;display:block;width:34.46px!important;height:38.77px!important;opacity:0;transition:opacity 100ms}
+.fg-icon[data-rive-status=ready] .fg-rive-canvas{opacity:1}
+.fg-fallback{position:absolute;left:3.23px;top:6.46px;display:block;width:28px;height:29.62px;opacity:1;transition:opacity 100ms}
+.fg-icon[data-rive-status=ready] .fg-fallback{opacity:0}
+.fansai-mobile-scope nav.tb.fg-nav .fg-fallback svg{position:absolute;inset:0;width:28px;height:29.62px;display:block;overflow:visible}
+.fg-fallback .fg-silver{opacity:1;transition:opacity 180ms}
+.fg-fallback .fg-blue{opacity:0;transition:opacity 180ms}
+.on .fg-fallback .fg-silver{opacity:0}
+.on .fg-fallback .fg-blue{opacity:1}
+.fansai-mobile-scope nav.tb.fg-nav #apBadge.bd{
+  position:absolute;top:2px;left:calc(50% + 9px);right:auto;
+  display:grid;place-items:center;min-width:14px;width:auto;height:14px;padding:0 3px;
+  border:1px solid rgba(255,255,255,.97);border-radius:10px;background:#ed9277;color:white;
+  font:650 8px/1 geistSans,-apple-system,sans-serif;box-shadow:0 1px 3px #a35c3620;z-index:5;
+}
+.fansai-mobile-scope nav.tb.fg-nav #apBadge.bd[hidden]{display:none!important}
+@media(max-width:350px){.fansai-mobile-scope nav.tb.fg-nav{width:calc(100% - 24px);padding-inline:3px}.fansai-mobile-scope nav.tb.fg-nav button{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.fansai-mobile-scope nav.tb.fg-nav *{transition:none!important;animation:none!important}.fg-light{display:none!important}}
+@supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){.fansai-mobile-scope nav.tb.fg-nav{background:rgba(242,248,252,.96)}}
+
+.fansai-mobile-scope .toast{bottom:calc(94px + env(safe-area-inset-bottom,0px))!important}
+.fansai-mobile-scope.secondary-page .toast{bottom:calc(24px + env(safe-area-inset-bottom,0px))!important}
+
+/* Dock appearance is intentionally independent from page colours. */
+.fansai-mobile-scope nav.tb.fg-nav[data-appearance="dark"]{
+  --fg-ink:#8ceaff;--fg-muted:#758b97;--fg-border:rgba(180,219,239,.24);
+  --fg-surface:linear-gradient(135deg,rgba(24,38,46,.85),rgba(10,20,26,.79) 55%,rgba(28,43,52,.86));
+  --fg-shadow:inset 0 1px 1px #d9f5ff38,inset 0 -1px 2px #00000060,0 8px 24px -10px #00000090;
+  --fg-inner:rgba(192,227,244,.1);--fg-sheen:rgba(211,240,255,.09);color-scheme:dark;
+}
+.fansai-mobile-scope nav.tb.fg-nav[data-appearance="light"]{
+  --fg-blur:16px;--fg-ink:#075473;--fg-muted:#64747e;--fg-border:rgba(255,255,255,.8);
+  --fg-surface:linear-gradient(135deg,rgba(255,255,255,.72),rgba(226,233,237,.62) 55%,rgba(248,250,252,.74));
+  --fg-shadow:inset 0 1px 1px #fff,inset 0 -1px 3px #97a9b946,0 8px 24px -12px #0008;
+  --fg-inner:rgba(255,255,255,.42);--fg-sheen:rgba(255,255,255,.26);color-scheme:light;
+}
+.fg-appearance{display:flex;align-items:center;gap:2px;padding:2px;background:#101d24;border:1px solid #263842;border-radius:20px;flex-shrink:0}
+.fansai-mobile-scope .fg-appearance button{display:flex;align-items:center;justify-content:center;gap:4px;min-height:30px;min-width:48px;padding:0 7px;border:0;border-radius:16px;background:none;color:#91a5ae;font:500 10px/1 geistSans,-apple-system,sans-serif;cursor:pointer;touch-action:manipulation;transition:background 150ms,color 150ms}
+.fansai-mobile-scope .fg-appearance button[aria-pressed="true"]{background:#e9f0f3;color:#264958;box-shadow:0 1px 4px #0002}
+.fansai-mobile-scope .fg-appearance button:focus-visible{outline:2px solid #7deaff;outline-offset:3px}
+.fansai-mobile-scope .fg-appearance button{position:relative}
+.fansai-mobile-scope .fg-appearance button::after{content:"";position:absolute;inset:-7px 0}
+.fg-appearance button span{font-size:13px}
+.growth-studio .gx-scope:has(.fg-appearance){height:34px;margin-top:-10px;margin-bottom:10px;gap:8px}
+.growth-studio .gx-scope:has(.fg-appearance)>span{font-size:9px}
+@media(max-width:350px){.growth-studio .gx-scope:has(.fg-appearance)>span{font-size:8px}.fansai-mobile-scope .fg-appearance button{padding-inline:5px;min-width:46px}}
+@supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
+  .fansai-mobile-scope nav.tb.fg-nav[data-appearance="dark"]{background:#15232b}
+  .fansai-mobile-scope nav.tb.fg-nav[data-appearance="light"]{background:#edf1f4}
+}
+@media(prefers-reduced-motion:reduce){.fansai-mobile-scope nav.tb.fg-nav,.fg-appearance *{transition:none!important}}

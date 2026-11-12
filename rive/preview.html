@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FansAI · Rive 玻璃导航</title>
+<style>
+:root{color-scheme:dark;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;background:#041015;color:#f4fbff}*{box-sizing:border-box}body{margin:0;min-height:100svh;display:grid;place-items:center;padding:28px}main{width:min(640px,100%)}a{color:#94fffb;text-decoration:none}.eyebrow{font-size:12px;letter-spacing:.12em;color:#98acb6;margin-top:32px}h1{font-size:clamp(28px,7vw,38px);letter-spacing:-.03em;margin:14px 0 12px}p{color:#a5b9c2;font-size:14px;line-height:1.7}.dock{margin:48px 0 32px;padding:10px 12px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;border-radius:40px;background:linear-gradient(140deg,#ffffffed,#ddeaf3d6 65%,#ffffffe6);box-shadow:inset 0 1px 1px white,0 12px 40px #0004;color:#657681}.tab{appearance:none;border:0;background:none;color:inherit;cursor:pointer;font:inherit;display:grid;justify-items:center;gap:0;padding:0 0 10px;border-radius:28px;min-width:0;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.tab canvas{display:block;width:80px;height:90px;max-width:100%;aspect-ratio:64/72}.tab span{font-size:14px;line-height:20px;white-space:nowrap}.tab[aria-pressed=true]{color:#075473;font-weight:650}.tab:focus-visible{outline:2px solid #075473;outline-offset:3px}.options{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}.options label{display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer}.options input{accent-color:#94fffb;width:18px;height:18px}#status{color:#829ba8;font-size:12px;margin:0}footer{font-size:12px;color:#829ba8;margin-top:40px;line-height:1.7}code{color:#bdcfd8}@media(max-width:460px){body{padding:22px}.dock{margin-top:38px;padding:8px 6px;border-radius:32px;gap:0}.tab canvas{width:64px;height:72px}.tab span{font-size:12px}.tab{padding-bottom:6px}}
+</style></head><body><main>
+<a href="../index.html">← FansAI Branding</a><div class="eyebrow">RIVE / GLASS NAVIGATION</div><h1>翻面，轻轻切换。</h1><p>点击图标切换青蓝选中态，长按查看按压反馈。</p>
+<nav class="dock" aria-label="Rive 图标预览">
+<button class="tab" type="button" data-artboard="Growth" aria-pressed="true"><canvas aria-hidden="true"></canvas><span>增长</span></button>
+<button class="tab" type="button" data-artboard="Customers" aria-pressed="false"><canvas aria-hidden="true"></canvas><span>客户</span></button>
+<button class="tab" type="button" data-artboard="Decision" aria-pressed="false"><canvas aria-hidden="true"></canvas><span>决策</span></button>
+<button class="tab" type="button" data-artboard="Workbench" aria-pressed="false"><canvas aria-hidden="true"></canvas><span>工作台</span></button>
+</nav><div class="options"><label><input id="reduced" type="checkbox">减少动态</label><p id="status" role="status">正在加载 Rive…</p></div>
+<footer><a href="build/fansai-glass-tabs.riv" download>下载 .riv</a> · <a href="README.md">接入信息</a><br>TabIcon · 4 Artboards · 483ms</footer>
+</main><script src="runtime/rive.js"></script><script>
+'use strict';
+const buttons=[...document.querySelectorAll('.tab')],reduced=document.querySelector('#reduced'),status=document.querySelector('#status');
+const preference=matchMedia('(prefers-reduced-motion: reduce)');reduced.checked=preference.matches;
+const instances=[],pressed=new Set();let selected=0,loaded=0;
+window.__rivePreview={instances,buttons,ready:false,errors:[]};
+function apply(){instances.forEach((instance,index)=>{const vm=instance?.viewModelInstance;if(!vm)return;vm.boolean('active').value=index===selected;vm.boolean('pressed').value=pressed.has(index);vm.boolean('reducedMotion').value=reduced.checked;});buttons.forEach((button,index)=>button.setAttribute('aria-pressed',String(index===selected)));}
+function release(index){pressed.delete(index);apply();}
+buttons.forEach((button,index)=>{
+ button.addEventListener('pointerdown',()=>{pressed.add(index);apply();});
+ ['pointerup','pointercancel','pointerleave','lostpointercapture','blur'].forEach(type=>button.addEventListener(type,()=>release(index)));
+ button.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){pressed.add(index);apply();}if(event.key==='ArrowRight'||event.key==='ArrowLeft'){event.preventDefault();buttons[(index+(event.key==='ArrowRight'?1:3))%4].focus();}});
+ button.addEventListener('keyup',()=>release(index));button.addEventListener('click',()=>{pressed.clear();selected=index;apply();});
+});
+reduced.addEventListener('change',apply);preference.addEventListener('change',event=>{reduced.checked=event.matches;apply();});window.addEventListener('blur',()=>{pressed.clear();apply();});
+function resize(){instances.forEach(instance=>{if(instance?.loaded)instance.resizeDrawingSurfaceToCanvas(Math.min(4,Math.max(2,devicePixelRatio||1)));});}
+window.addEventListener('resize',resize);const observer=new ResizeObserver(resize);buttons.forEach(button=>observer.observe(button));
+async function start(){
+ const [wasm,binary]=await Promise.all(['runtime/rive.wasm','build/fansai-glass-tabs.riv'].map(async url=>{const response=await fetch(url);if(!response.ok)throw new Error(url+' '+response.status);return response.arrayBuffer();}));
+ rive.RuntimeLoader.setWasmFallbackUrl(null);rive.RuntimeLoader.setWasmBinary(wasm);
+ buttons.forEach((button,index)=>{
+  instances[index]=new rive.Rive({canvas:button.querySelector('canvas'),buffer:binary,artboard:button.dataset.artboard,stateMachine:'TabIcon',autoplay:true,autoBind:true,enableRiveAssetCDN:false,shouldDisableRiveListeners:true,layout:new rive.Layout({fit:rive.Fit.Contain,alignment:rive.Alignment.Center}),
+   onLoad:()=>queueMicrotask(()=>{resize();apply();if(++loaded===buttons.length){window.__rivePreview.ready=true;status.textContent='4 个图标已就绪';}}),
+   onLoadError:error=>{window.__rivePreview.errors.push(String(error));status.textContent='动画加载失败';}});
+ });
+}
+start().catch(error=>{window.__rivePreview.errors.push(error.message);status.textContent=location.protocol==='file:'?'请通过本地 HTTP 服务打开此预览':'动画加载失败，请刷新重试';console.error(error);});
+window.addEventListener('pagehide',()=>{observer.disconnect();instances.forEach(instance=>instance.cleanup());});
+</script></body></html>

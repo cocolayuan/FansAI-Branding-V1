@@ -1,0 +1,12 @@
+name: fansai-glass-tabs
+main: Growth
+exclude:
+  - build
+  - runtime
+  - preview
+  - versions
+output:
+  dir: build
+logs:
+  file: build/rive.log
+  problems: build/problems.log

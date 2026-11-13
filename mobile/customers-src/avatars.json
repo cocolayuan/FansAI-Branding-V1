@@ -1,0 +1,46 @@
+{
+  "Leo C": {
+    "filename": "assets/leo-c.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?fit=crop&crop=faces&w=160&h=160&q=85&fm=jpg",
+    "sourcePage": "https://unsplash.com/photos/man-wearing-henley-top-portrait-7YVZYZeITc8",
+    "photographer": "Jurica Koletić",
+    "license": "Unsplash License",
+    "licenseUrl": "https://unsplash.com/license",
+    "usage": "Illustrative stock portrait for a fictional Demo person; not an identity claim.",
+    "width": 160,
+    "height": 160
+  },
+  "Grace T": {
+    "filename": "assets/grace-t.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?fit=crop&crop=faces&w=160&h=160&q=85&fm=jpg",
+    "sourcePage": "https://unsplash.com/photos/closeup-photography-of-woman-smiling-mEZ3PoFGs_k",
+    "photographer": "Michael Dam",
+    "license": "Unsplash License",
+    "licenseUrl": "https://unsplash.com/license",
+    "usage": "Illustrative stock portrait for a fictional Demo person; not an identity claim.",
+    "width": 160,
+    "height": 160
+  },
+  "Sean G": {
+    "filename": "assets/sean-g.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&crop=faces&w=160&h=160&q=85&fm=jpg",
+    "sourcePage": "https://unsplash.com/photos/man-wearing-white-v-neck-shirt-iFgRcqHznqg",
+    "photographer": "Joseph Gonzalez",
+    "license": "Unsplash License",
+    "licenseUrl": "https://unsplash.com/license",
+    "usage": "Illustrative stock portrait for a fictional Demo person; not an identity claim.",
+    "width": 160,
+    "height": 160
+  },
+  "ZZ": {
+    "filename": "assets/zz.jpg",
+    "imageUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?fit=crop&crop=faces&w=160&h=160&q=85&fm=jpg",
+    "sourcePage": "https://unsplash.com/photos/woman-wearing-black-crew-neck-shirt-3TLl_97HNJo",
+    "photographer": "Aiony Haust",
+    "license": "Unsplash License",
+    "licenseUrl": "https://unsplash.com/license",
+    "usage": "Illustrative stock portrait for a fictional Demo person; not an identity claim.",
+    "width": 160,
+    "height": 160
+  }
+}

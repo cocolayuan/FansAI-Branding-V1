@@ -14,6 +14,13 @@ const NEW_SLOT = '(0,ie.jsx)(FansaiCustomersBoard,{B:S.data,n:u.n,r:u.r,S:e})';
 const START = '\n/* fansai-customers-mint:start */\n';
 const END = '\n/* fansai-customers-mint:end */\n';
 const STYLE_START = '<style id="fansai-customers-mint">';
+const JSX_FILES = ['customers.jsx', 'project-modal.jsx'];
+const CSS_FILES = ['customers.css', 'project-modal.css'];
+const CUSTOMER_MODAL_PATCH = {
+  name: 'Customer project detail modal only',
+  before: '(0,ie.jsx)(eE,{p:P,S:e,closeSheet:n,goApprovals:()=>{n(),t({sc:"pending",ph:"all",tab:"appr",page:null,nav:[]}),window.scrollTo(0,0)}})',
+  after: '(0,ie.jsx)(FansaiCustomerProjectModal,{p:P,source:h.data?.rows?.find(row=>String(row.id)===P.id),S:e,closeSheet:n,goApprovals:()=>{n(),t({sc:"pending",ph:"all",tab:"appr",page:null,nav:[]}),window.scrollTo(0,0)}})',
+};
 const CUSTOMER_APP_PATCHES = [
   {
     name: 'Customer heading only',
@@ -25,6 +32,7 @@ const CUSTOMER_APP_PATCHES = [
     before: 'cseg:"board",per:"m",cf:"all",q:""',
     after: 'cseg:"board",per:"m",cf:"project_status_1",q:""',
   },
+  CUSTOMER_MODAL_PATCH,
 ];
 function applyPatches(text, patches, reverse = false) {
   for (const patch of reverse ? [...patches].reverse() : patches) {
@@ -72,8 +80,23 @@ function esbuild() {
   }
   throw new Error('esbuild is required. Set FANSAI_ESBUILD_PATH to an installed esbuild module directory.');
 }
+function avatarData() {
+  const manifest = JSON.parse(fs.readFileSync(path.join(__dirname, 'avatars.json'), 'utf8'));
+  return Object.fromEntries(Object.entries(manifest).map(([name, entry]) => {
+    const filename = path.resolve(__dirname, entry.filename);
+    assert.ok(filename.startsWith(__dirname + path.sep), 'Avatar assets must be local to customers-src');
+    assert.match(filename, /\.jpg$/i, 'Avatar assets are JPEGs');
+    const bytes = fs.readFileSync(filename);
+    assert.ok(bytes[0] === 0xff && bytes[1] === 0xd8, 'Avatar asset contains JPEG bytes');
+    return [name, 'data:image/jpeg;base64,' + bytes.toString('base64')];
+  }));
+}
+function styles() {
+  return CSS_FILES.map(filename => fs.readFileSync(path.join(__dirname, filename), 'utf8')).join('\n');
+}
 function compile() {
-  const jsx = fs.readFileSync(path.join(__dirname, 'customers.jsx'), 'utf8');
+  const jsx = 'var CX_AVATARS = ' + JSON.stringify(avatarData()) + ';\n' +
+    JSX_FILES.map(filename => fs.readFileSync(path.join(__dirname, filename), 'utf8')).join('\n');
   return esbuild().transformSync(jsx, {
     loader: 'jsx', target: 'es2020', jsxFactory: 'CXReact.createElement', jsxFragment: 'CXReact.Fragment',
     charset: 'utf8', legalComments: 'inline', minify: false,
@@ -82,7 +105,7 @@ function compile() {
 function generate() {
   const source = decode(baseline());
   const code = compile();
-  const css = fs.readFileSync(path.join(__dirname, 'customers.css'), 'utf8');
+  const css = styles();
   assert.ok(!css.includes('</style'), 'CSS cannot close its embedding style element');
   exactlyOnce(source.app, 'function KM(');
   exactlyOnce(source.app, SLOT);
@@ -96,6 +119,6 @@ function generate() {
 if (require.main === module) {
   const { output } = generate();
   fs.writeFileSync(path.join(ROOT, 'mobile/index.html'), output);
-  console.log('Built mobile/index.html: Customers component, heading, initial stage, scoped styles, and navigation touch fix.');
+  console.log('Built mobile/index.html: Customers board, project modal, embedded portraits, heading, initial stage, scoped styles, and navigation repairs.');
 }
-module.exports = { ROOT, BASELINE_REF, CUSTOMER_APP_PATCHES, NAV_APP_PATCHES, NAV_INNER_PATCHES, applyPatches, SLOT, NEW_SLOT, START, END, STYLE_START, exactlyOnce, plainScript, replaceScript, decode, baseline, compile, generate };
+module.exports = { ROOT, BASELINE_REF, JSX_FILES, CSS_FILES, CUSTOMER_MODAL_PATCH, CUSTOMER_APP_PATCHES, NAV_APP_PATCHES, NAV_INNER_PATCHES, applyPatches, SLOT, NEW_SLOT, START, END, STYLE_START, exactlyOnce, plainScript, replaceScript, decode, baseline, avatarData, styles, compile, generate };

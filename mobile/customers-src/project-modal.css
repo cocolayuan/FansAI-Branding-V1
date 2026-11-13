@@ -1,0 +1,65 @@
+/* Customer project detail only: centered operation surface, fixed head/footer. */
+.fansai-mobile-scope .sheet:has(.cx-project-modal){
+  --ink:#18343d;--mute:#70858d;--tint:#f0f5f6;
+  top:50%;bottom:auto;left:50%;width:min(520px,calc(100% - 32px));
+  max-height:calc(100dvh - 32px);padding:0;border:0;border-radius:26px;
+  display:flex;flex-direction:column;overflow:hidden;background:#fff;
+  color:#18343d;filter:none!important;box-shadow:0 28px 86px -24px #001a244f;
+  opacity:0;visibility:hidden;pointer-events:none;
+  transform:translate(-50%,-48%) scale(.985);
+  transition:opacity .2s ease,transform .25s cubic-bezier(.2,.8,.2,1),visibility .2s;
+}
+.fansai-mobile-scope .sheet.on:has(.cx-project-modal){opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.fansai-mobile-scope .sheet:has(.cx-project-modal)>.grab{display:none}
+.fansai-mobile-scope:has(.cx-project-modal)>.scrim{background:rgba(16,34,42,.32);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.cx-project-modal{min-height:0;max-height:calc(100dvh - 32px);display:flex;flex-direction:column;outline:none;background:#fff;font-family:var(--cn,'PingFang SC',sans-serif);font-weight:500;color:#18343d}
+.cx-project-modal *{box-sizing:border-box}
+.cx-project-modal button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cx-project-modal :is(button,[tabindex]):focus-visible{outline:2px solid #49b6d8;outline-offset:3px}
+.cx-project-head{flex:0 0 auto;display:grid;grid-template-columns:minmax(0,1fr) 44px;column-gap:12px;row-gap:14px;padding:22px 22px 20px;background:#fff}
+.cx-project-eyebrow{margin:0 0 8px;font-size:11px;line-height:1.3;color:#73878e;font-weight:500}
+.cx-project-head h2{margin:0;font-size:23px;line-height:1.35;letter-spacing:-.5px;font-weight:650;overflow-wrap:anywhere;color:#18343d}
+.cx-project-close{width:44px;height:44px;display:grid;place-items:center;align-self:start;padding:0;border:0;border-radius:50%;background:#f0f5f6;color:#4d6973}
+.cx-project-close:hover{background:#e4eff1}
+.cx-project-context{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-size:11px;line-height:1.4}
+.cx-project-status{padding:7px 10px;border-radius:9px;background:#e1f1f5;color:#177489;font-weight:600}
+.cx-project-status.is-review{background:#fdf1e3;color:#a66b21}
+.cx-project-status.is-complete{background:#eaf6ee;color:#218348}
+.cx-project-code{color:#7c8e95;font-family:var(--en,Outfit,sans-serif);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.cx-project-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#c3d3d8 transparent;padding:18px;background:#f0f5f6;display:flex;flex-direction:column;gap:16px}
+.cx-project-body>section{flex:0 0 auto}
+.cx-project-finance,.cx-project-info{padding:20px;border:0;border-radius:20px;background:#fff}
+.cx-project-contract{display:flex;flex-direction:column;gap:10px}
+.cx-project-contract>span:first-child,.cx-project-finance-grid>div>span,.cx-project-info dt{font-size:12px;line-height:1.5;color:#70858d}
+.cx-project-money{display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:3px;font-family:var(--en,Outfit,'PingFang SC',sans-serif);font-size:inherit;font-weight:600;line-height:1.2;font-variant-numeric:tabular-nums;letter-spacing:-.45px;max-width:100%;overflow-wrap:anywhere}
+.cx-project-money>small{font-size:.58em;font-weight:500;letter-spacing:0}
+.cx-project-money>span{overflow-wrap:anywhere;min-width:0}
+.cx-project-hero-money{font-size:36px;color:#163b45;letter-spacing:-1.2px}
+.cx-project-finance-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px 16px;margin-top:26px}
+.cx-project-finance-grid>div{min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:7px}
+.cx-project-finance-grid b{display:block;max-width:100%;font-size:20px;font-weight:600;line-height:1.3;color:#234550}
+.cx-project-finance-grid>div>small{font-size:11px;color:#82969d;line-height:1.4}
+.cx-project-finance-grid .cx-project-collected{color:#208464}
+.cx-project-modal .is-loss{color:#c17632}
+.cx-project-info dl{margin:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px 16px}
+.cx-project-info dl>div{min-width:0}
+.cx-project-info dd{margin:6px 0 0;font-size:14px;line-height:1.6;font-weight:600;overflow-wrap:anywhere;color:#294852}
+.cx-project-wide{grid-column:1/-1}
+.cx-project-delay{display:inline-block;padding:3px 8px;margin-left:10px;border-radius:7px;background:#fbefdf;color:#b3752f;font-size:11px;font-weight:500;vertical-align:middle}
+.cx-project-lifecycle{padding:4px 0 2px}
+.cx-project-lifecycle h3{margin:0 0 14px 3px;color:#34515d;font-size:15px;font-weight:600}
+.cx-project-lifecycle ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.cx-project-lifecycle li{display:flex;align-items:center;gap:11px;min-width:0;padding:14px 12px;border:0;border-radius:16px;background:#f8fbfc;color:#8da0a7}
+.cx-project-lifecycle li[data-state=done]{background:#e2efec;color:#34846c}
+.cx-project-lifecycle li[data-state=current]{background:#d6eaf1;color:#185b73}
+.cx-project-step-mark{width:26px;height:26px;display:grid;place-items:center;flex:0 0 26px;font-family:var(--en,Outfit,sans-serif);font-size:12px;line-height:1;font-weight:600}
+.cx-project-step-mark svg{width:22px;height:22px}
+.cx-project-lifecycle li>div{display:flex;flex-direction:column;gap:3px;min-width:0}
+.cx-project-lifecycle li b{font-size:13px;line-height:1.4;font-weight:600}
+.cx-project-lifecycle li>div>span{font-size:10px;line-height:1.5;color:inherit;opacity:.8}
+.cx-project-foot{flex:0 0 auto;display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:16px 22px max(16px,env(safe-area-inset-bottom));background:#fff;border:0}
+.cx-project-button{min-height:44px;min-width:100px;padding:11px 22px;border:0;border-radius:14px;background:#f0f4f5;color:#4a6470;font-size:13px;font-weight:600}
+.cx-project-button.is-primary{background:#173b45;color:#dcfbf4}
+.cx-project-button:active,.cx-project-close:active{transform:scale(.97)}
+@media(max-width:360px){.cx-project-head{padding:18px}.cx-project-head h2{font-size:21px}.cx-project-body{padding:14px}.cx-project-finance,.cx-project-info{padding:17px}.cx-project-finance-grid{gap:20px 12px}.cx-project-hero-money{font-size:32px}.cx-project-finance-grid b{font-size:18px}.cx-project-foot{padding-inline:18px}.cx-project-lifecycle li{gap:6px;padding:12px 9px}}
+@media(prefers-reduced-motion:reduce){.fansai-mobile-scope .sheet:has(.cx-project-modal){transition:none}.cx-project-modal button:active{transform:none}}

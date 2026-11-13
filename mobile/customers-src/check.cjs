@@ -9,7 +9,7 @@ const build = require('./build.cjs');
 const original = build.decode(build.baseline());
 const current = build.decode(fs.readFileSync(path.join(build.ROOT, 'mobile/index.html'), 'utf8'));
 const code = build.compile();
-const css = fs.readFileSync(path.join(__dirname, 'customers.css'), 'utf8');
+const css = build.styles();
 const inserted = build.START + code + build.END;
 build.exactlyOnce(current.app, inserted);
 build.exactlyOnce(current.app, build.NEW_SLOT);
@@ -27,7 +27,7 @@ assert.equal(build.replaceScript(current.outer, 'inner', build.plainScript(origi
 assert.equal(build.generate().output, current.outer, 'Build is reproducible from editable source');
 
 // Parse block boundaries so nested media/supports rules cannot hide broad selectors.
-function validateCSS(source) {
+function validateCSS(source, modal = false) {
   const text = source.replace(/\/\*[\s\S]*?\*\//g, '');
   let index = 0, selectors = 0;
   function walk(keyframes = false) {
@@ -68,7 +68,10 @@ function validateCSS(source) {
         }
         pieces.push(piece.trim());
         for (const selector of pieces) {
-          assert.ok(selector.includes('#v-cust'), `Selector must be scoped to Customers: ${selector}`);
+          const modalComponent = /^\.cx-project-[a-z][\w-]*(?=[\s.#:[>+~]|$)/.test(selector);
+          const modalHost = /^\.fansai-mobile-scope \.sheet(?:\.on)?:has\(\.cx-project-modal\)(?:>\.grab)?$/.test(selector);
+          const modalScrim = selector === '.fansai-mobile-scope:has(.cx-project-modal)>.scrim';
+          assert.ok(modal ? modalComponent || modalHost || modalScrim : selector.includes('#v-cust'), `Selector must be scoped to ${modal ? 'the Customer project modal' : 'Customers'}: ${selector}`);
           selectors++;
         }
       }
@@ -88,7 +91,7 @@ function validateCSS(source) {
   assert.ok(selectors > 0, 'Scoped Customers CSS exists');
   return selectors;
 }
-const count = validateCSS(css);
+const count = build.CSS_FILES.reduce((sum, filename) => sum + validateCSS(fs.readFileSync(path.join(__dirname, filename), 'utf8'), filename === 'project-modal.css'), 0);
 console.log(`PASS: ${count} scoped CSS selectors, JS syntax, reproducible build, and exact preservation of all other app code/assets.`);
 
 // Exercise the actual pull-to-refresh touch handler against content and fixed-nav targets.
@@ -177,12 +180,16 @@ const fakeReact = {
   },
   useRef(initial) { return { current: initial }; },
   useEffect() {},
+  useLayoutEffect() {},
+  useId() { return 'cx-test-project'; },
 };
 const context = vm.createContext({
   F: value => value,
   X: () => fakeReact,
   Oo: value => value == null ? '—' : String(value),
   Vm: () => '',
+  l: (value, params = {}) => value.replace(/\{([^}]+)\}/g, (match, key) => params[key] ?? match),
+  ic: JSON.parse(/\bic=(\[[^\]]+\])/.exec(original.app)[1]),
 });
 vm.runInContext(original.app.slice(adapterStart, adapterEnd) + '\n' + code, context);
 const board = context.HM(captured, captured.period);
@@ -217,9 +224,30 @@ check('Captured amounts and collection share retain their original values', () =
   const tree = render(board, cny, true);
   assert.equal(nodeText(byClass(tree, 'cx-hero-number')[0]), '¥640,000');
   assert.match(nodeText(byClass(tree, 'cx-hero-meta')[0]), /62\.5%/);
-  assert.equal(byClass(tree, 'cx-gauge-received')[0].props['data-share'], .625);
-  assert.equal(byClass(tree, 'cx-gauge-pending')[0].props['data-share'], .375);
-  assert.equal(byClass(tree, 'cx-gauge-received')[0].props['data-share'] + byClass(tree, 'cx-gauge-pending')[0].props['data-share'], 1);
+  const received = byClass(byClass(tree, 'cx-collection-blocks')[0], 'is-received')[0];
+  const pending = byClass(byClass(tree, 'cx-collection-blocks')[0], 'is-pending')[0];
+  assert.equal(received.props['data-share'], .625);
+  assert.equal(pending.props['data-share'], .375);
+  assert.equal(received.props['data-share'] + pending.props['data-share'], 1);
+  assert.equal(received.props.style.flexGrow, .625, 'Received panel width derives from the actual share');
+  assert.equal(pending.props.style.flexGrow, .375, 'Pending panel width derives from the actual share');
+});
+check('Collection panels select and reset the same cash detail as the legend', () => {
+  let tree = render(board, cny, true);
+  byClass(byClass(tree, 'cx-collection-blocks')[0], 'is-received')[0].props.onClick();
+  tree = render();
+  assert.equal(nodeText(byClass(tree, 'cx-hero-number')[0]), '¥400,000');
+  assert.equal(byClass(byClass(tree, 'cx-collection-blocks')[0], 'is-received')[0].props['aria-pressed'], true);
+  byClass(byClass(tree, 'cx-collection-blocks')[0], 'is-received')[0].props.onClick();
+  assert.equal(nodeText(byClass(render(), 'cx-hero-number')[0]), '¥640,000');
+});
+check('A fully collected amount renders one panel with an honest 100% share', () => {
+  const tree = render({ ...board, left: 0 }, cny, true);
+  const parts = byClass(tree, 'cx-collection-part');
+  assert.equal(parts.length, 1);
+  assert.equal(parts[0].props['data-share'], 1);
+  assert.equal(parts[0].props.style.flexGrow, 1);
+  assert.match(parts[0].props['aria-label'], /100\.0%/);
 });
 check('Cash selection toggles the amount and restores the aggregate', () => {
   let tree = render(board, cny, true);
@@ -266,9 +294,8 @@ check('A missing target remains unknown in visible and accessible output', () =>
 check('Zero amounts do not fabricate a collection ratio or customer distribution', () => {
   const empty = { ...board, recv: 0, left: 0, sign: 0, back: 0, signC: 0, conc: [], concTotal: 0, cr3: 0, cr5: 0, fun: [], bd: [] };
   const tree = render(empty, cny, true);
-  assert.match(nodeText(tree), /本期暂无签约金额/);
-  assert.equal(byClass(tree, 'cx-gauge-received').length, 0);
-  assert.equal(byClass(tree, 'cx-gauge-pending').length, 0);
+  assert.match(nodeText(tree), /暂无签约金额/);
+  assert.equal(byClass(tree, 'cx-collection-part').length, 0);
   assert.equal(byClass(tree, 'cx-matrix-dot').length, 0);
   assert.ok(!nodeText(byClass(tree, 'cx-hero-meta')[0]).includes('0.0%'));
   assert.ok(nodeText(byClass(tree, 'cx-finance-strip')[0]).includes('—'));
@@ -283,6 +310,120 @@ check('A mismatched period shows no stale board values', () => {
   const tree = render({ ...board, mismatch: true }, cny, true);
   assert.match(nodeText(tree), /本月暂无业务数据/);
   assert.equal(byClass(tree, 'cx-cash').length, 0);
+});
+check('Demo portraits are embedded offline and unknown names retain an initials fallback', () => {
+  const avatars = build.avatarData();
+  for (const [name, src] of Object.entries(avatars)) {
+    const avatar = context.CXAvatar({ name });
+    const image = allNodes(avatar, node => node.type === 'img')[0];
+    assert.equal(image.props.src, src);
+    assert.ok(src.startsWith('data:image/jpeg;base64,'));
+    assert.equal(image.props.alt, '', 'Decorative portraits do not claim to depict the Demo identity');
+    const target = { hidden: false };
+    image.props.onError({ currentTarget: target });
+    assert.equal(target.hidden, true, 'A failed image reveals the existing initials');
+  }
+  const unknown = context.CXAvatar({ name: 'New Owner' });
+  assert.equal(allNodes(unknown, node => node.type === 'img').length, 0);
+  assert.equal(nodeText(unknown), 'NO');
+});
+
+const projectSource = JSON.parse(fixtures['/api/admin/bd/projects?page=1&pageSize=100'].b).data.rows[0];
+const project = {
+  id: String(projectSource.id), n: projectSource.name, c: projectSource.customerName, code: projectSource.code,
+  amt: Number(projectSource.contractAmount), cost: Number(projectSource.estimatedCost), inv: projectSource.invoicedAmount,
+  rec: projectSource.paidAmount, currency: projectSource.currency, bd: projectSource.bdOwnerName, ae: projectSource.ownerName,
+  stg: 2, settled: false, apr: false, due: '—', late: 0,
+};
+check('Project finance keeps captured values, known zeroes, and unknown inputs distinct', () => {
+  const values = context.cxProjectDetailValues(project, projectSource);
+  assert.equal(values.amount, 40000);
+  assert.equal(values.cost, 0);
+  assert.equal(values.received, 40000);
+  assert.equal(values.gross, 40000);
+  assert.equal(values.margin, 100);
+  const unknown = context.cxProjectDetailValues(project, { contractAmount: null, estimatedCost: null, invoicedAmount: '', paidAmount: null });
+  for (const key of ['amount', 'cost', 'invoiced', 'received', 'gross', 'margin']) assert.equal(unknown[key], null);
+  const missingCost = context.cxProjectDetailValues(project, { contractAmount: 40000, estimatedCost: null });
+  assert.equal(missingCost.gross, null, 'Unknown cost cannot fabricate gross profit');
+  const zero = context.CXProjectMoney({ value: 0, currency: 'CNY', state: cny });
+  assert.equal(nodeText(zero), '¥0');
+  assert.equal(nodeText(context.CXProjectMoney({ value: null, currency: 'CNY', state: cny })), '—');
+  assert.equal(nodeText(context.CXProjectMoney({ value: 40000, currency: 'CNY', state: { cur: 'USD', fx: 8 } })), '$5,000');
+  assert.equal(nodeText(context.CXProjectMoney({ value: 40000, currency: 'CNY', state: { cur: 'USD', fx: 0 } })), '—');
+});
+check('Project detail keeps its original close and approval actions and stage meaning', () => {
+  let closed = 0, approved = 0;
+  const renderProject = p => context.FansaiCustomerProjectModal({ p, source: projectSource, S: cny, closeSheet: () => closed++, goApprovals: () => approved++ });
+  let tree = renderProject({ ...project, apr: true });
+  assert.ok(nodeText(tree).includes(project.n));
+  assert.equal(nodeText(byClass(tree, 'cx-project-hero-money')[0]), '¥40,000');
+  byClass(tree, 'cx-project-close')[0].props.onClick();
+  const buttons = allNodes(byClass(tree, 'cx-project-foot')[0], node => node.type === 'button');
+  assert.equal(buttons.length, 2);
+  buttons[0].props.onClick();buttons[1].props.onClick();
+  assert.equal(closed, 2);assert.equal(approved, 1);
+  assert.equal(allNodes(tree, node => node.type === 'li' && node.props['data-state'] === 'done').length, 2);
+  assert.equal(allNodes(tree, node => node.type === 'li' && node.props['aria-current'] === 'step').length, 1);
+  tree = renderProject(project);
+  assert.equal(allNodes(byClass(tree, 'cx-project-foot')[0], node => node.type === 'button').length, 1, 'No approval action is added to a project without pending approval');
+});
+
+// Run the actual layout effect against a small host model. This validates the
+// existing sheet's open/close lifecycle and focus contract; browser review owns
+// real layout, scrolling, and animation behavior.
+check('Project modal traps focus while open and releases the host on close and cleanup', () => {
+  const listeners = {}, frames = new Map();
+  let frameId = 0, observerCallback, cleanup, closeCount = 0, disconnected = false;
+  const doc = { activeElement: null, hidden: false, body: { style: { overflow: 'auto' } }, documentElement: { style: { overflow: '' } },
+    addEventListener(name, callback) { listeners[name] = callback; }, removeEventListener(name) { delete listeners[name]; } };
+  class Element {
+    constructor(classes = '') { this.classes = new Set(classes.split(' '));this.attrs = new Map();this.children = [];this.parentElement = null;this.inert = false;this.isConnected = true;this.ownerDocument = doc;this.classList = { contains: value => this.classes.has(value) }; }
+    append(...children) { for (const child of children) { child.parentElement = this;this.children.push(child); } }
+    getAttribute(name) { return this.attrs.get(name) ?? null; }
+    setAttribute(name, value) { this.attrs.set(name, value); }
+    removeAttribute(name) { this.attrs.delete(name); }
+    closest(selector) { return (selector === '[inert]' ? this.inert : this.classes.has(selector.slice(1))) ? this : this.parentElement?.closest(selector) ?? null; }
+    contains(target) { return target === this || this.children.some(child => child.contains(target)); }
+    focus() { doc.activeElement = this; }
+    getClientRects() { return [{}]; }
+  }
+  const scope = new Element('fansai-mobile-scope'), content = new Element('app'), nav = new Element('fg-nav'), scrim = new Element('scrim'), host = new Element('sheet on');
+  scrim.id = 'scrim';scope.append(content, nav, scrim, host);
+  const trigger = new Element(), node = new Element('cx-project-modal'), close = new Element(), body = new Element(), footerClose = new Element(), approval = new Element();
+  content.append(trigger);host.append(node);node.append(close, body, footerClose, approval);trigger.focus();
+  nav.inert = true;nav.setAttribute('aria-hidden', 'false');host.setAttribute('aria-labelledby', 'original-title');host.setAttribute('aria-hidden', 'false');
+  node.querySelectorAll = selector => selector === '[data-cx-modal-reveal]' ? [] : [close, body, footerClose, approval];
+  scope.querySelector = () => nav;
+  const media = { matches: true, addEventListener() {}, removeEventListener() {} };
+  doc.defaultView = { HTMLElement: Element, matchMedia: () => media,
+    MutationObserver: class { constructor(callback) { observerCallback = callback; } observe() {} disconnect() { disconnected = true; } },
+    requestAnimationFrame(callback) { frames.set(++frameId, callback);return frameId; }, cancelAnimationFrame(id) { frames.delete(id); } };
+  const flush = () => { for (const [id, callback] of [...frames]) { frames.delete(id);callback(); } };
+  const oldRef = fakeReact.useRef, oldLayout = fakeReact.useLayoutEffect;
+  let refs = 0;
+  fakeReact.useRef = () => ({ current: refs++ === 0 ? node : close });
+  fakeReact.useLayoutEffect = effect => { cleanup = effect(); };
+  try {
+    context.FansaiCustomerProjectModal({ p: { ...project, apr: true }, source: projectSource, S: cny, closeSheet: () => closeCount++, goApprovals() {} });
+    assert.equal(doc.activeElement, close);assert.equal(content.inert, true);assert.equal(scrim.inert, false);
+    assert.equal(doc.body.style.overflow, 'hidden');assert.equal(doc.documentElement.style.overflow, 'hidden');
+    let prevented = 0;
+    approval.focus();listeners.keydown({ key: 'Tab', shiftKey: false, preventDefault() { prevented++; } });
+    assert.equal(doc.activeElement, close);
+    listeners.keydown({ key: 'Tab', shiftKey: true, preventDefault() { prevented++; } });
+    assert.equal(doc.activeElement, approval);assert.equal(prevented, 2);
+    listeners.focusin({ target: trigger });assert.equal(doc.activeElement, close);
+    listeners.keydown({ key: 'Escape', preventDefault() {}, stopPropagation() {} });assert.equal(closeCount, 1);
+    host.classes.delete('on');host.setAttribute('aria-hidden', 'true');observerCallback();flush();
+    assert.equal(doc.activeElement, trigger);assert.equal(content.inert, false);assert.equal(content.getAttribute('aria-hidden'), null);
+    assert.equal(nav.inert, true);assert.equal(nav.getAttribute('aria-hidden'), 'false');
+    assert.equal(doc.body.style.overflow, 'auto');assert.equal(doc.documentElement.style.overflow, '');
+    host.classes.add('on');host.setAttribute('aria-hidden', 'false');observerCallback();assert.equal(doc.activeElement, close);
+    cleanup();flush();assert.equal(disconnected, true);assert.equal(Object.keys(listeners).length, 0);
+    assert.equal(content.inert, false);assert.equal(doc.body.style.overflow, 'auto');assert.equal(doc.activeElement, trigger);
+    assert.equal(host.getAttribute('aria-labelledby'), 'original-title');assert.equal(host.getAttribute('aria-describedby'), null);
+  } finally { fakeReact.useRef = oldRef;fakeReact.useLayoutEffect = oldLayout; }
 });
 console.log(`${customerChecks} Customers rendering checks passed.`);
 execFileSync(process.execPath, ['tests/data.test.cjs'], { cwd: build.ROOT, stdio: 'inherit' });

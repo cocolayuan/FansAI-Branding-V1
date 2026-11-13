@@ -13,12 +13,14 @@ const css = fs.readFileSync(path.join(__dirname, 'customers.css'), 'utf8');
 const inserted = build.START + code + build.END;
 build.exactlyOnce(current.app, inserted);
 build.exactlyOnce(current.app, build.NEW_SLOT);
-const restoredApp = current.app.replace(inserted, '').replace(build.NEW_SLOT, build.SLOT);
-assert.equal(restoredApp, original.app, 'Other React application code remains byte-identical');
+const restoredApp = build.applyPatches(build.applyPatches(current.app.replace(inserted, '').replace(build.NEW_SLOT, build.SLOT), build.NAV_APP_PATCHES, true), build.CUSTOMER_APP_PATCHES, true);
+assert.equal(restoredApp, original.app, 'Application code outside the explicit Customer and navigation patches remains byte-identical');
+assert.ok(current.app.includes('cust:["","Customer"]'), 'Only the Customer header uses the requested English title');
+assert.ok(current.app.includes('cseg:"board",per:"m",cf:"project_status_1",q:""'), 'Customer library defaults to initiation while the board remains the initial subtab');
 new vm.Script(current.app, { filename: 'mobile/embedded-app.js' });
 const style = build.STYLE_START + css + '</style>\n';
 build.exactlyOnce(current.inner, style);
-const restoredInner = build.replaceScript(current.inner.replace(style, ''), 'appsrc', build.plainScript(original.inner, 'appsrc'));
+const restoredInner = build.replaceScript(build.applyPatches(current.inner.replace(style, ''), build.NAV_INNER_PATCHES, true), 'appsrc', build.plainScript(original.inner, 'appsrc'));
 assert.equal(restoredInner, original.inner, 'Other HTML, CSS, runtimes, data and assets remain byte-identical');
 assert.equal(build.replaceScript(current.outer, 'inner', build.plainScript(original.outer, 'inner')), original.outer,
   'Outer document and iframe wrapper remain byte-identical');
@@ -89,6 +91,66 @@ function validateCSS(source) {
 const count = validateCSS(css);
 console.log(`PASS: ${count} scoped CSS selectors, JS syntax, reproducible build, and exact preservation of all other app code/assets.`);
 
+// Exercise the actual pull-to-refresh touch handler against content and fixed-nav targets.
+// A short downward finger movement on navigation must not consume the tap.
+function checkPullRefreshTargets() {
+  const start = current.app.indexOf('function $B(');
+  const end = current.app.indexOf('}nn();var fk=', start) + 1;
+  assert.ok(start >= 0 && end > start, 'Pull-refresh source seam exists');
+  class FakeElement {
+    constructor(insideApp = false, input = false) { this.insideApp = insideApp; this.input = input; this.parentElement = null; }
+    closest(selector) { return selector === '.fansai-mobile-scope' ? this : this.input ? this : null; }
+  }
+  const content = {
+    contains: target => target.insideApp,
+    classList: { add() {}, remove() {} }, style: {},
+  };
+  function gesture(insideApp, input = false) {
+    const handlers = {};
+    let prevented = 0;
+    const context = vm.createContext({
+      Element: FakeElement,
+      Dc: { useRef: value => ({ current: value }), useState: value => [value, () => {}], useEffect: effect => effect() },
+      qu: { jsx: () => null, jsxs: () => null }, l: value => value, YB: 70,
+      document: { addEventListener: (name, fn) => { handlers[name] = fn; }, removeEventListener() {} },
+      window: { scrollY: 0, getComputedStyle: () => ({ overflowY: 'visible' }), setTimeout: () => 1, location: { reload() {} } },
+      requestAnimationFrame: () => 1, cancelAnimationFrame() {}, clearTimeout() {},
+    });
+    vm.runInContext(current.app.slice(start, end), context);
+    context.$B({ disabled: false, contentRef: { current: content } });
+    const target = new FakeElement(insideApp, input);
+    handlers.touchstart({ target, touches: [{ identifier: 1, clientX: 12, clientY: 12 }] });
+    handlers.touchmove({ target, touches: [{ identifier: 1, clientX: 12, clientY: 24 }], cancelable: true, preventDefault() { prevented++; } });
+    return prevented;
+  }
+  assert.equal(gesture(false), 0, 'Fixed navigation taps do not enter pull-to-refresh or prevent their click');
+  assert.ok(gesture(true) > 0, 'Pull-to-refresh still handles gestures inside app content');
+  assert.equal(gesture(true, true), 0, 'Input gestures still bypass pull-to-refresh');
+  console.log('PASS Navigation: fixed-tab gestures remain native while content pull-to-refresh still works.');
+}
+checkPullRefreshTargets();
+
+function checkGrowthKeepAlive() {
+  const patch = build.NAV_APP_PATCHES.find(value => value.before === 'function Pj(');
+  assert.ok(patch, 'Growth lifecycle patch is explicit');
+  const source = patch.after.split('\nfunction Pj(')[0];
+  let component, compare;
+  vm.runInNewContext(source, { ju: { memo(render, comparator) { component = render; compare = comparator; return render; } } });
+  const previousChild = { type: 'Growth', props: { period: 'today' } };
+  assert.equal(component({ children: previousChild }), previousChild, 'Boundary preserves the original Growth child object');
+  assert.equal(component({ children: null }), null, 'Cold inactive Growth does not initialize');
+  assert.equal(compare({ active: true, children: previousChild }, { active: false, children: null }), true,
+    'Leaving Growth retains its mounted subtree instead of disposing it');
+  assert.equal(compare({ active: false, children: previousChild }, { active: false, children: null }), true,
+    'Customer interactions do not rerender hidden Growth');
+  assert.equal(compare({ active: false, children: previousChild }, { active: true, children: {} }), false,
+    'Returning to Growth refreshes its props');
+  assert.equal(compare({ active: true, children: previousChild }, { active: true, children: {} }), false,
+    'Growth remains reactive while active');
+  console.log('PASS Navigation: Growth retains its inactive subtree and refreshes on return.');
+}
+checkGrowthKeepAlive();
+
 // Render the actual compiled component against the captured Customers fixture.
 // This small React-compatible tree harness exercises hooks and event callbacks;
 // it intentionally does not pretend to verify DOM layout or browser animations.
@@ -155,7 +217,9 @@ check('Captured amounts and collection share retain their original values', () =
   const tree = render(board, cny, true);
   assert.equal(nodeText(byClass(tree, 'cx-hero-number')[0]), '¥640,000');
   assert.match(nodeText(byClass(tree, 'cx-hero-meta')[0]), /62\.5%/);
-  assert.equal(byClass(tree, 'cx-fin').length, 40);
+  assert.equal(byClass(tree, 'cx-gauge-received')[0].props['data-share'], .625);
+  assert.equal(byClass(tree, 'cx-gauge-pending')[0].props['data-share'], .375);
+  assert.equal(byClass(tree, 'cx-gauge-received')[0].props['data-share'] + byClass(tree, 'cx-gauge-pending')[0].props['data-share'], 1);
 });
 check('Cash selection toggles the amount and restores the aggregate', () => {
   let tree = render(board, cny, true);
@@ -203,7 +267,8 @@ check('Zero amounts do not fabricate a collection ratio or customer distribution
   const empty = { ...board, recv: 0, left: 0, sign: 0, back: 0, signC: 0, conc: [], concTotal: 0, cr3: 0, cr5: 0, fun: [], bd: [] };
   const tree = render(empty, cny, true);
   assert.match(nodeText(tree), /本期暂无签约金额/);
-  assert.equal(byClass(tree, 'cx-fin').length, 0);
+  assert.equal(byClass(tree, 'cx-gauge-received').length, 0);
+  assert.equal(byClass(tree, 'cx-gauge-pending').length, 0);
   assert.equal(byClass(tree, 'cx-matrix-dot').length, 0);
   assert.ok(!nodeText(byClass(tree, 'cx-hero-meta')[0]).includes('0.0%'));
   assert.ok(nodeText(byClass(tree, 'cx-finance-strip')[0]).includes('—'));

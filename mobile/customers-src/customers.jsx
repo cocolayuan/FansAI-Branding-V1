@@ -8,6 +8,35 @@ function CXAmount({value, state, className = ''}) {
 function CXArrow({down = false}) {
   return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={down ? 'm6 9 6 6 6-6' : 'M6 18 18 6M6 6h12v12'} /></svg>;
 }
+function CXCollectionGauge({received, pending, selected}) {
+  const total = received + pending;
+  const collected = total > 0 ? received / total : null;
+  const share = selected === 'pending' && collected != null ? 1-collected : collected;
+  const point = angle => [180+96*Math.cos(angle*Math.PI/180),124+96*Math.sin(angle*Math.PI/180)];
+  const arc = (start,end) => {
+    const a=point(start),b=point(end);
+    return `M ${a[0]} ${a[1]} A 96 96 0 ${end-start>180?1:0} 1 ${b[0]} ${b[1]}`;
+  };
+  const boundary=135+270*(collected||0), end=point(boundary);
+  return <div className={'cx-gauge is-'+selected} role="img" aria-label={`签约金额结构：已收款 ${received} 万人民币，已签待收 ${pending} 万人民币；回款占比 ${collected==null?'暂无数据':(collected*100).toFixed(1)+'%'}`}>
+    <svg viewBox="0 0 360 244" aria-hidden="true">
+      <defs>
+        <linearGradient id="cx-arc-mint" x1="0" y1="1" x2="1" y2="0"><stop stopColor="#4ebdb6"/><stop offset=".65" stopColor="#88f5df"/><stop offset="1" stopColor="#b8fff0"/></linearGradient>
+        <linearGradient id="cx-arc-blue" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#aedcff"/><stop offset="1" stopColor="#5e94bb"/></linearGradient>
+      </defs>
+      <path className="cx-gauge-track" d={arc(135,405)} />
+      {collected!=null&&<>
+        {received>0&&<path className="cx-gauge-received" data-share={collected} d={arc(135,boundary)} pathLength="1" stroke="url(#cx-arc-mint)"/>}
+        {pending>0&&<path className="cx-gauge-pending" data-share={1-collected} d={arc(boundary,405)} pathLength="1" stroke="url(#cx-arc-blue)"/>}
+        {Array.from({length:37},(_,i)=>{const a=(135+i*7.5)*Math.PI/180;return <path key={i} className="cx-gauge-tick" d={`M ${180+117*Math.cos(a)} ${124+117*Math.sin(a)} L ${180+121*Math.cos(a)} ${124+121*Math.sin(a)}`}/>;})}
+        <circle className="cx-gauge-bead-halo" cx={end[0]} cy={end[1]} r="13"/>
+        <circle className="cx-gauge-bead" cx={end[0]} cy={end[1]} r="8"/>
+      </>}
+      <text x="88" y="226" className="cx-gauge-axis">0%</text><text x="272" y="226" textAnchor="end" className="cx-gauge-axis">100%</text>
+    </svg>
+    <div className="cx-gauge-readout" key={selected}><span>{selected==='pending'?'待收款占比':'回款完成'}</span><strong>{share==null?'—':(share*100).toFixed(1)}{share!=null&&<small>%</small>}</strong><span className="cx-gauge-caption">{selected==='pending'?'已签约 · 待到账':total>0?'已到账 / 签约总额':'本期暂无签约金额'}</span></div>
+  </div>;
+}
 function FansaiCustomersBoard({B, n, r, S}) {
   const [cash, setCash] = CXReact.useState('all');
   const [group, setGroup] = CXReact.useState(0);
@@ -32,10 +61,13 @@ function FansaiCustomersBoard({B, n, r, S}) {
     const finish=()=>{animations.forEach(a=>a.cancel());animations=[];};
     const play = (node) => {
       if(media.matches || document.hidden)return;
-      node.querySelectorAll('.cx-fin').forEach((fin,i)=>animations.push(fin.animate([
-        {transform:'translateY(24px) scaleY(.24)',opacity:0},
-        {transform:'translateY(0) scaleY(1)',opacity:1}
-      ],{duration:760,delay:i*12,easing:'cubic-bezier(.2,.7,.2,1)',fill:'backwards'})));
+      node.querySelectorAll('.cx-gauge-received,.cx-gauge-pending').forEach((path,i)=>animations.push(path.animate([
+        {strokeDasharray:'1',strokeDashoffset:'1'},
+        {strokeDasharray:'1',strokeDashoffset:'0'}
+      ],{duration:1100,delay:i*120,easing:'cubic-bezier(.18,.7,.2,1)',fill:'backwards'})));
+      node.querySelectorAll('.cx-gauge-bead,.cx-gauge-bead-halo').forEach((bead,i)=>animations.push(bead.animate([
+        {opacity:0},{opacity:0,offset:.65},{opacity:i?.4:1}
+      ],{duration:1400,easing:'ease-out',fill:'backwards'})));
       node.querySelectorAll('.cx-matrix-dot').forEach((dot,i)=>animations.push(dot.animate([
         {transform:'scale(.1)'},{transform:'scale(1)'}
       ],{duration:520,delay:(i%10)*22+Math.floor(i/10)*15,easing:'cubic-bezier(.2,.7,.2,1)',fill:'backwards'})));
@@ -46,7 +78,7 @@ function FansaiCustomersBoard({B, n, r, S}) {
     const observer = window.IntersectionObserver ? new IntersectionObserver(entries=>{
       entries.forEach(entry=>{if(entry.isIntersecting){play(entry.target);observer.unobserve(entry.target);}});
     },{threshold:.2}) : null;
-    el.querySelectorAll('.cx-ribbon,.cx-matrix,.cx-stages').forEach(node=>observer?observer.observe(node):play(node));
+    el.querySelectorAll('.cx-gauge,.cx-matrix,.cx-stages').forEach(node=>observer?observer.observe(node):play(node));
     const onReduce=()=>{if(media.matches)finish();};
     const onHide=()=>{if(document.hidden)finish();};
     media.addEventListener('change',onReduce);document.addEventListener('visibilitychange',onHide);
@@ -62,23 +94,7 @@ function FansaiCustomersBoard({B, n, r, S}) {
       <div className="cx-cash-heading"><h2 id="cx-cash-title">{cash==='all'?'签约与回款':cash==='received'?'已收款':'已签待收'}</h2><span>{n}</span></div>
       <CXAmount value={cash==='all'?totalCash:cash==='received'?B.recv:B.left} state={S} className="cx-hero-number" />
       <div className="cx-hero-meta">{cash==='all'?(collected==null?<>暂无回款比例</>:<>已收回 <b>{(collected*100).toFixed(1)}%</b> 的签约金额</>):<button onClick={()=>setCash('all')}>查看签约总额 <span>↗</span></button>}</div>
-      <div className="cx-ribbon" role="img" aria-label={`签约金额结构：已收款 ${B.recv} 万人民币，已签待收 ${B.left} 万人民币；回款占比 ${collected==null?'暂无数据':(collected*100).toFixed(1)+'%'}`}>
-        <svg viewBox="0 0 360 160" aria-hidden="true">
-          <defs>
-            <linearGradient id="cx-fin-mint" x1="0" x2="1"><stop stopColor="#4dbea8"/><stop offset=".4" stopColor="#c4ffec"/><stop offset=".68" stopColor="#88f5df"/><stop offset="1" stopColor="#4ca9a8"/></linearGradient>
-            <linearGradient id="cx-fin-blue" x1="0" x2="1"><stop stopColor="#5d9ed0"/><stop offset=".4" stopColor="#dbf4ff"/><stop offset=".7" stopColor="#a9d5ff"/><stop offset="1" stopColor="#5595bf"/></linearGradient>
-            <filter id="cx-fin-shadow" x="-50%" y="-40%" width="200%" height="200%"><feDropShadow dx="0" dy="7" stdDeviation="4" floodColor="#316b69" floodOpacity=".12"/></filter>
-          </defs>
-          {totalCash>0 && Array.from({length:40},(_,i)=>{
-            const got=(i+.5)/40<=collected;
-            const dim=(cash==='received'&&!got)||(cash==='pending'&&got);
-            const y=26+Math.sin(i/39*Math.PI*2-.7)*16;
-            return <g key={i} className="cx-fin" style={{opacity:dim?.18:1,transformOrigin:`${22+i*8.1}px ${y+80}px`}}><rect x={18+i*8.1} y={y} width="7" height="94" rx="3.5" fill={`url(#cx-fin-${got?'mint':'blue'})`} filter="url(#cx-fin-shadow)"/><path d={`M${20+i*8.1} ${y+7}v78`} stroke="#fff" opacity=".34" strokeWidth=".6"/></g>;
-          })}
-        </svg>
-        {totalCash===0&&<span className="cx-ribbon-empty">本期暂无签约金额</span>}
-        <div className="cx-ribbon-label"><span>已收款</span><span>已签待收</span></div>
-      </div>
+      <CXCollectionGauge received={B.recv} pending={B.left} selected={cash}/>
       <div className="cx-cash-legend">
         <button aria-pressed={cash==='received'} onClick={()=>setCash(cash==='received'?'all':'received')}><span><i className="cx-mint"/>已收款 <CXArrow/></span><CXAmount value={B.recv} state={S}/></button>
         <button aria-pressed={cash==='pending'} onClick={()=>setCash(cash==='pending'?'all':'pending')}><span><i className="cx-blue"/>已签待收 <CXArrow/></span><CXAmount value={B.left} state={S}/></button>
@@ -116,6 +132,6 @@ function FansaiCustomersBoard({B, n, r, S}) {
         {owner===name&&<div className="cx-owner-detail"><span>个人目标 <b>{target==null?'未设置':Oo(target,S)}</b></span><span>完成率 <b>{target? (amount/target*100).toFixed(1)+'%':'—'}</b></span></div>}
       </div>)}{!B.bd.length&&<p className="cx-empty">本期暂无 BD 数据</p>}</div>
     </section>
-    <details className="cx-source"><summary>数据与统计口径 <CXArrow down/></summary><p>本页为离线 Demo。所有金额、客户与阶段均保留原始演示数据；图形由这些数值派生。回款结构按已收款与已签待收合计计算，非按目标金额计算。回款带共 40 格，每格约占 2.5%；圆点按合同占比分配取整，精确值以读数为准。</p><p>平均客单 = 本期签约额 ÷ {B.signC} 家。{B.incomplete?'部分金额缺入账汇率，未计入。':''}{Vm(S)}</p></details>
+    <details className="cx-source"><summary>数据与统计口径 <CXArrow down/></summary><p>本页为离线 Demo。所有金额、客户与阶段均保留原始演示数据；图形由这些数值派生。回款结构按已收款与已签待收合计计算，非按目标金额计算。进度弧以完整签约金额为 100%，薄荷色为已收款、冰蓝色为已签待收；圆点按合同占比分配取整，精确值以读数为准。</p><p>平均客单 = 本期签约额 ÷ {B.signC} 家。{B.incomplete?'部分金额缺入账汇率，未计入。':''}{Vm(S)}</p></details>
   </div>;
 }

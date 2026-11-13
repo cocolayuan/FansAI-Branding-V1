@@ -5,6 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 const assert = require('node:assert/strict');
+const { appPatches: NAV_APP_PATCHES, innerPatches: NAV_INNER_PATCHES } = require('./integration.cjs');
 const ROOT = path.resolve(__dirname, '../..');
 // Pin the original export so rebuilds remain stable after this change is merged.
 const BASELINE_REF = '1ceb4418f96d99744212d6b12b82226519c43e61';
@@ -13,6 +14,27 @@ const NEW_SLOT = '(0,ie.jsx)(FansaiCustomersBoard,{B:S.data,n:u.n,r:u.r,S:e})';
 const START = '\n/* fansai-customers-mint:start */\n';
 const END = '\n/* fansai-customers-mint:end */\n';
 const STYLE_START = '<style id="fansai-customers-mint">';
+const CUSTOMER_APP_PATCHES = [
+  {
+    name: 'Customer heading only',
+    before: 'cust:["客户业务 · Customers","客户经营"]',
+    after: 'cust:["","Customer"]',
+  },
+  {
+    name: 'Initial customer library stage',
+    before: 'cseg:"board",per:"m",cf:"all",q:""',
+    after: 'cseg:"board",per:"m",cf:"project_status_1",q:""',
+  },
+];
+function applyPatches(text, patches, reverse = false) {
+  for (const patch of reverse ? [...patches].reverse() : patches) {
+    const from = reverse ? patch.after : patch.before;
+    const to = reverse ? patch.before : patch.after;
+    exactlyOnce(text, from);
+    text = text.replace(from, to);
+  }
+  return text;
+}
 
 function exactlyOnce(text, needle) {
   assert.equal(text.split(needle).length - 1, 1, `Expected one occurrence: ${needle.slice(0, 90)}`);
@@ -64,8 +86,8 @@ function generate() {
   assert.ok(!css.includes('</style'), 'CSS cannot close its embedding style element');
   exactlyOnce(source.app, 'function KM(');
   exactlyOnce(source.app, SLOT);
-  const app = source.app.replace('function KM(', START + code + END + 'function KM(').replace(SLOT, NEW_SLOT);
-  let inner = replaceScript(source.inner, 'appsrc', Buffer.from(app).toString('base64'));
+  const app = applyPatches(applyPatches(source.app.replace('function KM(', START + code + END + 'function KM(').replace(SLOT, NEW_SLOT), CUSTOMER_APP_PATCHES), NAV_APP_PATCHES);
+  let inner = applyPatches(replaceScript(source.inner, 'appsrc', Buffer.from(app).toString('base64')), NAV_INNER_PATCHES);
   exactlyOnce(inner, '</head>');
   inner = inner.replace('</head>', STYLE_START + css + '</style>\n</head>');
   const output = replaceScript(source.outer, 'inner', Buffer.from(inner).toString('base64'));
@@ -74,6 +96,6 @@ function generate() {
 if (require.main === module) {
   const { output } = generate();
   fs.writeFileSync(path.join(ROOT, 'mobile/index.html'), output);
-  console.log('Built mobile/index.html: Customers component and scoped styles only.');
+  console.log('Built mobile/index.html: Customers component, heading, initial stage, scoped styles, and navigation touch fix.');
 }
-module.exports = { ROOT, BASELINE_REF, SLOT, NEW_SLOT, START, END, STYLE_START, exactlyOnce, plainScript, replaceScript, decode, baseline, compile, generate };
+module.exports = { ROOT, BASELINE_REF, CUSTOMER_APP_PATCHES, NAV_APP_PATCHES, NAV_INNER_PATCHES, applyPatches, SLOT, NEW_SLOT, START, END, STYLE_START, exactlyOnce, plainScript, replaceScript, decode, baseline, compile, generate };

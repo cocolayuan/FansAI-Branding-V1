@@ -1,15 +1,15 @@
 /* Customers: Growth dark gray-teal surfaces, bright mint-blue data, white controls. */
-.fansai-mobile-scope:has(#v-cust:not([hidden])){background:#041015!important;background-image:none!important}
+.fansai-mobile-scope:has(#v-cust:not([hidden])){background:#000!important;background-image:none!important}
 .fansai-mobile-scope:has(#v-cust:not([hidden])) > .app,.fansai-mobile-scope:has(#v-cust:not([hidden])) > .sheet{filter:none}
-.fansai-mobile-scope:has(#v-cust:not([hidden])) .hd{background:#041015ee;backdrop-filter:blur(20px);padding-top:28px;padding-bottom:20px;position:relative;top:auto}
+.fansai-mobile-scope:has(#v-cust:not([hidden])) .hd{background:#000;backdrop-filter:none;padding-top:30px;padding-bottom:24px;position:relative;top:auto}
 .fansai-mobile-scope:has(#v-cust:not([hidden])) .hd .eyebrow{color:#839aa4}
-.fansai-mobile-scope:has(#v-cust:not([hidden])) .hd .ttl{font-size:36px;letter-spacing:-1.4px;color:#94fffb;font-weight:650}
+.fansai-mobile-scope:has(#v-cust:not([hidden])) .hd .ttl{font-size:43px;letter-spacing:-.3px;color:#4beaff;font-weight:700;line-height:56px;font-family:geistSans,-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
 #v-cust{color:#f4fafb;padding-bottom:14px;--ink:#f4fafb;--mut:#9ab0b8;--teal:#94fffb;--amber:#e38730;--violet:#a9d5ff;--line:#20373e}
 #v-cust button,#v-cust summary{-webkit-tap-highlight-color:transparent}
 #v-cust button:focus-visible,#v-cust summary:focus-visible,#v-cust input:focus-visible{outline:3px solid #237eab;outline-offset:3px}
-#v-cust > .seg{display:flex;background:#102126;padding:5px;border-radius:14px;gap:4px;box-shadow:none;height:50px}
-#v-cust > .seg button{border-radius:10px;min-height:44px;color:#9bb0b8;font-size:13px;font-weight:500;transition:background .25s,color .25s;box-shadow:none}
-#v-cust > .seg button.on{color:#16373a;background:#e6f5f4;box-shadow:none;font-weight:650}
+#v-cust > .seg{display:flex;background:#0a1419;padding:3px;border-radius:14px;gap:0;box-shadow:none;height:43px;min-height:43px}
+#v-cust > .seg button{border-radius:11px;min-height:37px;color:#788b94;font-size:13px;font-weight:400;transition:background .25s,color .25s;box-shadow:none;padding:1px 6px}
+#v-cust > .seg button.on{color:#193947;background:#fff;box-shadow:none;font-weight:700}
 #v-cust > .fbar{background:transparent;border:0;box-shadow:none;padding:12px 2px;margin-bottom:0;min-height:48px;font-size:13px;color:#c3d5db}
 #v-cust > .fbar .fbl{gap:8px}#v-cust > .fbar .fbr{color:#8da4ae;font-size:12px}
 #v-cust .cx-board{font-family:geistSans,-apple-system,"PingFang SC",sans-serif;font-weight:450}
@@ -21,21 +21,21 @@
 #v-cust .cx-context>span:first-child{display:flex;align-items:center;gap:6px}
 #v-cust .cx-context i{width:5px;height:5px;background:#88f5df;border-radius:50%}
 #v-cust .cx-demo{border-radius:6px;padding:3px 6px;background:#152a32;color:#9ab4bf;font-size:10px}
-#v-cust .cx-cash{position:relative;border-radius:24px;overflow:hidden;background:#102126;box-shadow:none}
-#v-cust .cx-cash-heading{display:flex;align-items:center;justify-content:space-between;padding:24px 24px 0}
+#v-cust .cx-cash{position:relative;border-radius:24px;overflow:hidden;background:radial-gradient(ellipse at 15% 80%,#17475950,transparent 65%),linear-gradient(145deg,#142128,#0d1a20);box-shadow:inset 0 1px 0 #ffffff09}
+#v-cust .cx-cash-heading{display:flex;align-items:center;justify-content:space-between;padding:22px 22px 0}
 #v-cust .cx-cash-heading h2{font-size:15px;font-weight:500;letter-spacing:.2px;color:#d5eaef}
 #v-cust .cx-cash-heading>span{font-size:11px;color:#a0b8c0;background:#20363d;border-radius:8px;padding:5px 9px}
-#v-cust .cx-hero-number{font-size:clamp(38px,11vw,49px);padding:10px 24px 0;letter-spacing:-1.8px;font-weight:550;color:#f4fafb}
-#v-cust .cx-hero-meta{padding:8px 25px 0;font-size:12px;color:#a6bdc4;height:34px}
+#v-cust .cx-hero-number{font-size:clamp(38px,11vw,49px);padding:10px 22px 0;letter-spacing:-1.8px;font-weight:550;color:#f4fafb}
+#v-cust .cx-hero-meta{padding:8px 23px 0;font-size:12px;color:#a6bdc4;height:34px}
 #v-cust .cx-hero-meta b{color:#88f5df;font-weight:650}
 #v-cust .cx-hero-meta button{padding:0;background:transparent;color:#94fffb;min-height:28px}
-#v-cust .cx-ribbon{height:159px;position:relative;margin:2px 9px 0}
-#v-cust .cx-ribbon svg{width:100%;height:100%;overflow:visible;display:block}
-#v-cust .cx-fin{transition:opacity .35s ease}
-#v-cust .cx-ribbon-label{position:absolute;bottom:13px;left:16px;right:16px;display:flex;justify-content:space-between;color:#9ab8c1;font-size:10px}
-#v-cust .cx-ribbon-empty{position:absolute;inset:0;display:grid;place-items:center;color:#78918e;font-size:13px}
-#v-cust .cx-cash-legend{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#192e36;padding:12px}
-#v-cust .cx-cash-legend button{text-align:left;display:flex;flex-direction:column;gap:7px;background:#102126;padding:14px 12px;border-radius:14px;color:#88f5df;transition:background .3s}
+
+
+
+
+
+#v-cust .cx-cash-legend{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#13262dc9;padding:12px;border-top:1px solid #ffffff08}
+#v-cust .cx-cash-legend button{text-align:left;display:flex;flex-direction:column;gap:7px;background:#102027;padding:12px;border-radius:14px;color:#88f5df;transition:background .3s}
 #v-cust .cx-cash-legend button[aria-pressed=true]{background:#31515a}
 #v-cust .cx-cash-legend button>span:first-child{display:flex;align-items:center;gap:6px;font-size:11px;color:#bad0d6}
 #v-cust .cx-cash-legend svg{width:13px;height:13px;margin-left:auto;opacity:.6}
@@ -84,12 +84,12 @@
 #v-cust .cx-mix-tabs button[aria-pressed=true]{background:#e6f3ee;color:#285d54}
 #v-cust .cx-mix-tabs button>i{display:inline-block;width:5px;height:5px;border-radius:50%;margin-right:4px;vertical-align:1px}
 #v-cust .cx-mix-tabs button>span{display:block;font-size:14px;margin-top:4px;font-weight:550}
-#v-cust .cx-selected{background:#192e36;display:grid;grid-template-columns:1fr auto;gap:12px;margin:0 -18px;padding:21px 19px;align-items:center;color:#f4ffff;animation:cx-detail-in .3s ease-out}
-#v-cust .cx-selected>div>span:not(.cx-amount){font-size:10px;color:#9db9bb;display:block}
+#v-cust .cx-selected{background:#eaf2f3;display:grid;grid-template-columns:1fr auto;gap:12px;margin:0;padding:17px 15px;align-items:center;color:#24484b;animation:cx-detail-in .3s ease-out;border-radius:16px}
+#v-cust .cx-selected>div>span:not(.cx-amount){font-size:10px;color:#648186;display:block}
 #v-cust .cx-selected h3{font-size:15px;font-weight:500;margin-top:7px;line-height:1.5}
 #v-cust .cx-selected>div:last-child{text-align:right}
-#v-cust .cx-selected .cx-amount{font-size:25px;color:#94fffb;margin-bottom:7px}
-#v-cust .cx-footnote{font-size:9px;line-height:1.5;color:#8d9e9e;padding:11px 0}
+#v-cust .cx-selected .cx-amount{font-size:25px;color:#216765;margin-bottom:7px}
+#v-cust .cx-footnote{font-size:9px;line-height:1.5;color:#799196;padding:13px 1px 16px}
 #v-cust .cx-pipeline-card{background:#102126;border-radius:24px;padding:23px 18px 0;overflow:hidden}
 #v-cust .cx-stages{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
 #v-cust .cx-stages button{padding:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:9px;color:#94acb6}
@@ -125,19 +125,19 @@
 #v-cust .cx-source p{line-height:1.9;margin:10px 0}
 #v-cust .cx-empty{padding:28px 18px;background:#fff;border-radius:22px;text-align:center;font-size:13px;color:#748d8e;line-height:1.8;margin-top:16px}
 /* Existing customer and project interactions retain their original React/data logic. */
-#v-cust > .kg{gap:10px}#v-cust .kg .kpi{border:0;box-shadow:none;background:#ffffffd9;border-radius:20px;padding:17px 12px;min-height:108px}
-#v-cust .kg .kpi .v{font-size:25px;color:#245554}#v-cust .kg .kpi .l{font-size:11px;color:#678583}#v-cust .kg .kpi .s{color:#8ba09f;font-size:10px}
-#v-cust .kg .kpi.on{background:#cbeee0}
-#v-cust .search{border:0;background:#fff;border-radius:15px;min-height:49px;box-shadow:none}
-#v-cust .search input{font-size:13px}#v-cust .search svg{color:#709894}
+#v-cust > .kg{gap:10px}#v-cust .kg .kpi{border:0;box-shadow:none;background:#102126;border-radius:20px;padding:17px 12px;min-height:108px}
+#v-cust .kg .kpi .v{font-size:25px;color:#f4fafb}#v-cust .kg .kpi .l{font-size:11px;color:#abc0c8}#v-cust .kg .kpi .s{color:#88a3ad;font-size:10px}
+#v-cust .kg .kpi.on{background:#214650}
+#v-cust .search{border:0;background:#102126;border-radius:15px;min-height:49px;box-shadow:none}
+#v-cust .search input{font-size:13px;color:#edf8fb}#v-cust .search svg{color:#709894}
 #v-cust .chips{padding-bottom:9px;gap:6px}#v-cust .chip{border:0;background:#192e36;color:#b3c7cd;min-height:44px;border-radius:13px;padding:0 14px;font-size:12px}
 #v-cust .chip.on{color:#16363b;background:#94fffb;box-shadow:none}
-#v-cust .stack{gap:12px}#v-cust .cu{border:0;background:#fff;border-radius:22px;box-shadow:none;padding:20px 17px;gap:13px}
-#v-cust .cu .cav{background:#eaf3f1;color:#88a5a2;border-radius:13px;font-size:13px;width:40px;height:40px;box-shadow:none}
-#v-cust .cu .nm{font-size:16px;color:#284d4b}#v-cust .cu .sub{color:#89a09c;line-height:1.8;font-size:11px;margin-top:5px}
-#v-cust .cu .nums{background:#f3f8f6;padding:11px 13px;border-radius:12px;margin-top:12px;gap:16px}
-#v-cust .cu .nums b{color:#315e59;font-size:19px}#v-cust .cu .nums>div{font-size:10px;color:#78948e}
-#v-cust .cu .stg{gap:4px;margin:16px 0 9px}#v-cust .cu .stg i{height:5px;background:#e4eeec}#v-cust .cu .stg i.d{background:#7ed0b7}#v-cust .cu .stg i.c{background:#6aafd5}
+#v-cust .stack{gap:12px}#v-cust .cu{border:0;background:#102126;border-radius:22px;box-shadow:none;padding:20px 17px;gap:13px}
+#v-cust .cu .cav{background:#1c343d;color:#91afb9;border-radius:13px;font-size:13px;width:40px;height:40px;box-shadow:none}
+#v-cust .cu .nm{font-size:16px;color:#edf7fa}#v-cust .cu .sub{color:#96aeb7;line-height:1.8;font-size:11px;margin-top:5px}
+#v-cust .cu .nums{background:#192e36;padding:11px 13px;border-radius:12px;margin-top:12px;gap:16px}
+#v-cust .cu .nums b{color:#c8efee;font-size:19px}#v-cust .cu .nums>div{font-size:10px;color:#94adb6}
+#v-cust .cu .stg{gap:4px;margin:16px 0 9px}#v-cust .cu .stg i{height:5px;background:#29404a}#v-cust .cu .stg i.d{background:#7ed0b7}#v-cust .cu .stg i.c{background:#6aafd5}
 #v-cust .note{color:#8fa9af;font-size:10px;line-height:1.8}
 @keyframes cx-detail-in{from{opacity:.3;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:360px){#v-cust .cx-cash-heading{padding:21px 19px 0}#v-cust .cx-hero-number{padding-left:19px;font-size:40px}#v-cust .cx-hero-meta{padding-left:20px}#v-cust .cx-cash-legend button{padding:11px 12px}#v-cust .cx-cash-legend .cx-amount{font-size:23px}#v-cust .cx-finance-strip .cx-amount{font-size:17px}#v-cust .cx-mix-stat>strong{font-size:38px}#v-cust .cx-matrix{gap:3px}#v-cust .cx-selected .cx-amount{font-size:21px}#v-cust .cx-selected h3{font-size:13px}#v-cust .cx-owner>button{gap:8px}#v-cust .cx-owner .cx-amount{font-size:17px}}
@@ -145,12 +145,42 @@
 
 #v-cust .cx-cash-legend button:last-child .cx-amount{color:#a9d5ff}
 #v-cust .cx-stages button[aria-pressed=true] .cx-stage-track span{color:#174951}
-#v-cust .cu .hrow b{color:#173b3e}
+#v-cust .cu .hrow b{color:#edf7fa}
 
 #v-cust > .fbar .fbl em{color:#9eb6c0}
 #v-cust > .fbar .fbl{color:#c9dce2}
-#v-cust .search input{color:#173b3e}
+#v-cust .search input{color:#edf8fb}
 #v-cust .search input::placeholder{color:#7c939a;opacity:1}
-#v-cust .cu{--ink:#173b3e;--teal:#2d8f86;--violet:#5c8ca6}
-#v-cust .kg .kpi{background:#fff}
-#v-cust .kg .kpi:first-child{background:#bceee4}
+#v-cust .cu{--ink:#edf7fa;--teal:#8cf3e2;--violet:#a9d5ff}
+#v-cust .kg .kpi{background:#102126}
+#v-cust .kg .kpi:first-child{background:#17313a}
+
+/* Customer first screen uses the same title and segmented-control system as Growth. */
+.fansai-mobile-scope:has(#v-cust:not([hidden])) #hEb{display:none}
+#v-cust .kg .kpi:first-child .v{color:#94fffb}
+#v-cust .cu .pill.p-green{background:#183b30;color:#9ce3bb}
+#v-cust .cu .pill.p-teal{background:#1c3d42;color:#9ceddd}
+#v-cust .cu .pill.p-violet,#v-cust .cu .pill.p-blue{background:#1d354c;color:#b0d6ff}
+#v-cust .cu .pill.p-amber{background:#453322;color:#edba82}
+#v-cust .cu .pill.p-coral{background:#492e31;color:#f3a7aa}
+#v-cust .cu .stgl{color:#8eabb4}
+/* Exact proportions, one meaningful progress arc, local colored glass only. */
+#v-cust .cx-gauge{position:relative;margin:0 16px;height:220px;isolation:isolate}
+#v-cust .cx-gauge:before{content:"";position:absolute;inset:26px 38px 6px;border-radius:50%;background:radial-gradient(ellipse,#2e708b1a,transparent 70%);pointer-events:none}
+#v-cust .cx-gauge svg{width:100%;height:100%;display:block;overflow:visible}
+#v-cust .cx-gauge-track,#v-cust .cx-gauge-received,#v-cust .cx-gauge-pending{fill:none;stroke-width:19;stroke-linecap:round}
+#v-cust .cx-gauge-track{stroke:#23343b}
+#v-cust .cx-gauge-received,#v-cust .cx-gauge-pending{transition:opacity .3s ease;stroke-dasharray:1;stroke-dashoffset:0}
+#v-cust .cx-gauge-pending{stroke-width:14}
+#v-cust .cx-gauge-tick{stroke:#66848f;stroke-width:1;opacity:.5}
+#v-cust .cx-gauge-bead{fill:#d7fff6;stroke:#0c2026;stroke-width:3;transition:opacity .3s}
+#v-cust .cx-gauge-bead-halo{fill:#88f5df;opacity:.13}
+#v-cust .cx-gauge.is-pending .cx-gauge-received,#v-cust .cx-gauge.is-received .cx-gauge-pending{opacity:.2}
+#v-cust .cx-gauge-axis{font:10px geistSans,sans-serif;fill:#8faab5}
+#v-cust .cx-gauge-readout{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding-top:5px;pointer-events:none;animation:cx-detail-in .28s ease-out}
+#v-cust .cx-gauge-readout>span{font-size:11px;color:#a9c3cd}
+#v-cust .cx-gauge-readout strong{font-size:43px;line-height:1.1;letter-spacing:-2px;color:#c3fff1;font-weight:550;font-variant-numeric:tabular-nums}
+#v-cust .cx-gauge-readout strong small{font-size:20px;font-weight:450;letter-spacing:0;margin-left:3px;color:#9cd8d2}
+#v-cust .cx-gauge.is-pending .cx-gauge-readout strong{color:#c1dfff}
+#v-cust .cx-gauge-readout .cx-gauge-caption{font-size:10px;color:#7899a5;margin-top:2px}
+@media(max-width:360px){.fansai-mobile-scope:has(#v-cust:not([hidden])) .hd .ttl{font-size:38px}#v-cust .cx-gauge{height:195px;margin-inline:10px}#v-cust .cx-gauge-readout strong{font-size:38px}#v-cust .cx-gauge-readout .cx-gauge-caption{font-size:9px}#v-cust .cx-selected{gap:8px;padding:16px 12px}#v-cust .cx-selected .cx-amount{font-size:20px}}

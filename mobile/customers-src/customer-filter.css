@@ -1,0 +1,10 @@
+.fansai-mobile-scope .cx-filter-form{margin:0;min-width:0;display:flex;flex-direction:column;gap:28px}
+.fansai-mobile-scope .cx-filter-section{margin:0;padding:0;border:0;min-width:0}
+.fansai-mobile-scope .cx-filter-section h3{margin:0 0 12px;color:#6d818e;font-size:12px;font-weight:500;line-height:1.4}
+.fansai-mobile-scope .cx-filter-periods{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.fansai-mobile-scope .cx-filter-periods button,.fansai-mobile-scope .cx-filter-currencies button{min-width:0;padding:8px 6px;border-radius:13px;background:#fff;color:#627886;font-size:13px;font-weight:500;line-height:1.4}
+.fansai-mobile-scope .cx-filter-form button[aria-pressed=true]{background:#d3effd;color:#145777;font-weight:650}
+.fansai-mobile-scope .cx-filter-currencies{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:4px;border-radius:16px;background:#e9f0f4}
+.fansai-mobile-scope .cx-filter-currencies button:disabled{background:transparent;color:#97a9b3}
+.fansai-mobile-scope .cx-filter-note{margin:12px 2px 0;color:#7b8f9b;font-size:11px;line-height:1.7}
+@media(max-width:350px){.fansai-mobile-scope .cx-filter-periods{grid-template-columns:repeat(2,minmax(0,1fr))}}

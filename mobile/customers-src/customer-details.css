@@ -1,0 +1,37 @@
+/* Customer detail content. The shared sheet owns the complete pale-gray layer. */
+.fansai-mobile-scope .cx-customer-content{display:flex;flex-direction:column;gap:22px;color:#233f49}
+.fansai-mobile-scope .cx-customer-content *{box-sizing:border-box}
+.fansai-mobile-scope .cx-customer-metadata{padding:18px 20px;border:0;border-radius:20px;background:#fff}
+.fansai-mobile-scope .cx-customer-metadata dl{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px 20px;margin:0}
+.fansai-mobile-scope .cx-customer-metadata dl>div{min-width:0}
+.fansai-mobile-scope .cx-customer-metadata dt{font-size:11px;line-height:1.5;color:#7c919a;font-weight:500}
+.fansai-mobile-scope .cx-customer-metadata dd{margin:6px 0 0;font-size:14px;line-height:1.6;font-weight:600;color:#294752;overflow-wrap:anywhere}
+.fansai-mobile-scope .cx-customer-wide{grid-column:1/-1}
+.fansai-mobile-scope .cx-customer-status{display:inline-block;background:#e3f2ef;color:#247d70;border-radius:9px;padding:4px 8px;font-size:12px;line-height:1.4;font-weight:600}
+.fansai-mobile-scope .cx-customer-status[data-tone=p-blue],.fansai-mobile-scope .cx-customer-status[data-tone=p-violet]{background:#e8f1f7;color:#48778e}
+.fansai-mobile-scope .cx-customer-status[data-tone=p-grey]{background:#eef2f4;color:#80949d}
+.fansai-mobile-scope .cx-customer-status[data-tone=p-coral]{background:#f9e9e6;color:#b46752}
+.fansai-mobile-scope .cx-customer-metrics{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.fansai-mobile-scope .cx-customer-metrics>div{display:flex;flex-direction:column;align-items:flex-start;gap:13px;min-width:0;padding:18px;background:#fff;border:0;border-radius:18px}
+.fansai-mobile-scope .cx-customer-metrics>div>span{font-size:12px;line-height:1.4;color:#758d96}
+.fansai-mobile-scope .cx-customer-metrics b{max-width:100%;font-size:18px;line-height:1.4;font-weight:600;color:#264b58;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.fansai-mobile-scope .cx-customer-metrics .cx-customer-money{font-size:23px;letter-spacing:-.6px;font-family:var(--en,Outfit,'PingFang SC',sans-serif)}
+.fansai-mobile-scope .cx-customer-content .is-overdue{color:#bb793b}
+.fansai-mobile-scope .cx-customer-note{margin:-8px 2px 0;color:#84969d;font-size:11px;line-height:1.7}
+.fansai-mobile-scope .cx-customer-projects h3{display:flex;align-items:center;gap:9px;margin:0 2px 14px;font-size:15px;line-height:1.5;color:#3b5864;font-weight:600}
+.fansai-mobile-scope .cx-customer-projects h3>span{padding:2px 7px;border-radius:7px;background:#e4ecef;color:#69838f;font:500 11px/1.5 var(--en,Outfit,sans-serif);font-variant-numeric:tabular-nums}
+.fansai-mobile-scope .cx-customer-project-list{display:flex;flex-direction:column;gap:10px}
+.fansai-mobile-scope .cx-customer-project{padding:18px 20px;border:0;border-radius:18px;background:#fff}
+.fansai-mobile-scope .cx-customer-project h4{margin:0 0 13px;font-size:14px;line-height:1.5;font-weight:600;color:#284751;overflow-wrap:anywhere}
+.fansai-mobile-scope .cx-customer-project>div{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 12px}
+.fansai-mobile-scope .cx-customer-project .cx-project-money{font-size:20px;color:#345c6c}
+.fansai-mobile-scope .cx-customer-project-status{max-width:100%;padding:5px 8px;border-radius:8px;background:#e4f2f0;color:#3c8b7e;font-size:11px;line-height:1.4;font-weight:500;overflow-wrap:anywhere}
+.fansai-mobile-scope .cx-customer-project-status[data-tone=overdue],.fansai-mobile-scope .cx-customer-project-status[data-tone=waiting]{background:#f8eddf;color:#b17c40}
+.fansai-mobile-scope .cx-customer-project-status[data-tone=collected]{background:#e8f3e9;color:#49895d}
+.fansai-mobile-scope .cx-customer-empty{padding:24px 20px;border:0;border-radius:20px;background:#fff;color:#738b96;font-size:13px;line-height:1.7}
+.fansai-mobile-scope .cx-customer-empty b{color:#3f5c68;font-size:15px;font-weight:600}
+.fansai-mobile-scope .cx-customer-empty p{margin:6px 0 0}
+@media(max-width:360px){.fansai-mobile-scope .cx-customer-metadata,.fansai-mobile-scope .cx-customer-project{padding:17px}
+.fansai-mobile-scope .cx-customer-metrics{gap:10px}
+.fansai-mobile-scope .cx-customer-metrics>div{padding:15px}
+.fansai-mobile-scope .cx-customer-metrics .cx-customer-money{font-size:21px}}

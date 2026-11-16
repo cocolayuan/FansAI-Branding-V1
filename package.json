@@ -1,12 +1,20 @@
 {
   "name": "fansai-branding-v1",
+  "displayName": "FansAI Branding Data",
   "version": "1.0.0",
   "private": true,
-  "description": "Offline FansAI chart and glass UI demo",
+  "description": "FansAI Branding Data — offline chart and glass UI demo",
   "scripts": {
+    "build:mobile": "node mobile/customers-src/build.cjs",
+    "check:mobile": "node mobile/customers-src/check.cjs",
     "test": "node tests/data.test.cjs",
     "test:browser": "node tests/browser.cjs"
   },
-  "engines": { "node": ">=20" },
-  "devDependencies": { "playwright": "1.65.0" }
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.0",
+    "playwright": "1.65.0"
+  }
 }

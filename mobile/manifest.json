@@ -1,8 +1,8 @@
 {
-  "name": "FansAI Growth · 青蓝优化版",
+  "name": "FansAI Branding Data",
   "version": "2026-11-12",
   "file": "index.html",
-  "sha256": "7c28732e501d06742ca346a7726e6c4a3ea7ea1ae303294040936cf2260683fc",
+  "sha256": "9c82c0360d7b22d80deaaea4659daddb05918e70929d530f40851e3ade764cf9",
   "rive": {
     "file": "../rive/build/fansai-glass-tabs.riv",
     "embedded": true,

@@ -1,0 +1,193 @@
+{
+  "sourceFileKey": "5eV9HU93QC0oYubyKtNSMB",
+  "parentNodeId": "198:55949",
+  "icons": [
+    {
+      "key": "business-dashboard",
+      "label": "数据看板",
+      "nodeId": "198:55994",
+      "filename": "assets/43c58.png",
+      "width": 430,
+      "height": 390,
+      "bytes": 44183,
+      "sha256": "f551eebf5f19026435bf4d935237c61b723ab19225d84c022c9977bba3801686",
+      "sourceFileKey": "5eV9HU93QC0oYubyKtNSMB"
+    },
+    {
+      "key": "customers",
+      "label": "客户资料",
+      "nodeId": "198:55996",
+      "filename": "assets/d568a.png",
+      "width": 430,
+      "height": 390,
+      "bytes": 42972,
+      "sha256": "77decb4c52b26f170cba71ca082c7877a7fea250f2f43c4dcc105f7ba0e5014d",
+      "sourceFileKey": "5eV9HU93QC0oYubyKtNSMB"
+    },
+    {
+      "key": "projects",
+      "label": "项目管理",
+      "nodeId": "198:55998",
+      "filename": "assets/0bc11.png",
+      "width": 430,
+      "height": 390,
+      "bytes": 41580,
+      "sha256": "b157bd5c08e12a1114dd6c729619aa275e544b8d28edd47acde77c9e0c155d52",
+      "sourceFileKey": "5eV9HU93QC0oYubyKtNSMB"
+    },
+    {
+      "key": "approvals",
+      "label": "审批管理",
+      "nodeId": "198:56000",
+      "filename": "assets/ca484.png",
+      "width": 430,
+      "height": 390,
+      "bytes": 44538,
+      "sha256": "678ee935efa9837d0b4031de3b4688ccb9ba5e8cc82f62a5a96fa57b9895612b",
+      "sourceFileKey": "5eV9HU93QC0oYubyKtNSMB"
+    },
+    {
+      "key": "finance",
+      "label": "财务分析",
+      "nodeId": "198:56002",
+      "filename": "assets/d72ab.png",
+      "width": 430,
+      "height": 390,
+      "bytes": 43444,
+      "sha256": "8af0476bd2646885187dbee5c57607d5d5adac936af04a3baf63254c295d2272",
+      "sourceFileKey": "5eV9HU93QC0oYubyKtNSMB"
+    },
+    {
+      "key": "creators",
+      "label": "创作者列表",
+      "nodeId": "198:56004",
+      "filename": "assets/0215f.png",
+      "width": 430,
+      "height": 390,
+      "bytes": 45869,
+      "sha256": "f854c1de3438d2c98b96cc69e89e3801a62edf5e2de92ad385616c95d4aeb97c",
+      "sourceFileKey": "5eV9HU93QC0oYubyKtNSMB"
+    },
+    {
+      "key": "growth-dashboard",
+      "label": "数据看板",
+      "nodeId": "198:56006",
+      "filename": "assets/303d2.png",
+      "width": 430,
+      "height": 390,
+      "bytes": 40552,
+      "sha256": "d9accaceec5dd14cdbaf7b35496f7dec1f524c8a451a4363a394f3f07b4b8996",
+      "sourceFileKey": "5eV9HU93QC0oYubyKtNSMB"
+    },
+    {
+      "key": "content",
+      "label": "内容资产",
+      "nodeId": "198:56008",
+      "filename": "assets/e2b2b.png",
+      "width": 430,
+      "height": 390,
+      "bytes": 46425,
+      "sha256": "e98b76c34e15a5bb17db047e6f6e65e454629f2ef5229a79276a57aa918b20d5",
+      "sourceFileKey": "5eV9HU93QC0oYubyKtNSMB"
+    },
+    {
+      "key": "materials",
+      "label": "素材库",
+      "nodeId": "198:56010",
+      "filename": "assets/4a70c.png",
+      "width": 430,
+      "height": 390,
+      "bytes": 44777,
+      "sha256": "9b1d1f08c22da2788e5ea6ed3d5287c517087bdb96ba5b3ec90238ac050d5b12",
+      "sourceFileKey": "5eV9HU93QC0oYubyKtNSMB"
+    },
+    {
+      "key": "generation",
+      "label": "生成任务",
+      "nodeId": "198:56012",
+      "filename": "assets/96c44.png",
+      "width": 430,
+      "height": 390,
+      "bytes": 29664,
+      "sha256": "b73a3a42b6c9af622ab05b9f8999c129ad51bccb2268f3206cbaedbb8fbe16dd",
+      "sourceFileKey": "5eV9HU93QC0oYubyKtNSMB"
+    },
+    {
+      "key": "accounts",
+      "label": "账号管理",
+      "nodeId": "198:56014",
+      "filename": "assets/9d2b4.png",
+      "width": 430,
+      "height": 390,
+      "bytes": 46882,
+      "sha256": "af871e0fc4eb79ebba9183e56f84bf2758ecca58ffe5ce116e025f32b11a5bfc",
+      "sourceFileKey": "5eV9HU93QC0oYubyKtNSMB"
+    },
+    {
+      "key": "influencers",
+      "label": "达人库",
+      "nodeId": "198:56016",
+      "filename": "assets/09de0.png",
+      "width": 430,
+      "height": 390,
+      "bytes": 37466,
+      "sha256": "f4ef0fb0b8ce4a849eaf107e89edbe39cafacc2f57c1720156cebc67c40abb39",
+      "sourceFileKey": "5eV9HU93QC0oYubyKtNSMB"
+    },
+    {
+      "key": "blog",
+      "label": "博客管理",
+      "nodeId": "198:56018",
+      "filename": "assets/56ff5.png",
+      "width": 430,
+      "height": 390,
+      "bytes": 39333,
+      "sha256": "a7bae48f9d19d1384beae824da2566f7e271baefa54b0377120b29ac2e0217da",
+      "sourceFileKey": "5eV9HU93QC0oYubyKtNSMB"
+    },
+    {
+      "key": "data",
+      "label": "数据管理",
+      "nodeId": "198:56020",
+      "filename": "assets/be1c3.png",
+      "width": 430,
+      "height": 390,
+      "bytes": 44792,
+      "sha256": "ecbf7c4bf738929301b06469afd35b69722be165591c6aabf5adc67b2692dbe1",
+      "sourceFileKey": "5eV9HU93QC0oYubyKtNSMB"
+    },
+    {
+      "key": "suppliers",
+      "label": "供应商",
+      "nodeId": "198:56022",
+      "filename": "assets/fb53d.png",
+      "width": 430,
+      "height": 390,
+      "bytes": 42429,
+      "sha256": "a30117ac5c8548060b95ce91bcc3fa657a6342f8638d6efafc7bf2c7b11432c9",
+      "sourceFileKey": "5eV9HU93QC0oYubyKtNSMB"
+    },
+    {
+      "key": "internal-projects",
+      "label": "内部项目",
+      "nodeId": "198:56024",
+      "filename": "assets/440f3.png",
+      "width": 430,
+      "height": 390,
+      "bytes": 40781,
+      "sha256": "e7485c97ca86c022b4a4266a1f16c5ba99f629e7c05a3ef242c45ca42418a264",
+      "sourceFileKey": "5eV9HU93QC0oYubyKtNSMB"
+    },
+    {
+      "key": "knowledge",
+      "label": "知识库",
+      "nodeId": "209:64",
+      "filename": "assets/6ca3e.png",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 1109497,
+      "sha256": "f6f10b17852fb1b2bfc04d8f70e02920c96ccd312c11383589d3034f66016b4d",
+      "sourceFileKey": "5eV9HU93QC0oYubyKtNSMB"
+    }
+  ]
+}

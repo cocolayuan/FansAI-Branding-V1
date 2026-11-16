@@ -1,0 +1,4 @@
+interface:
+  display_name: "FansAI Branding Data V2"
+  short_description: "FansAI 移动端视觉规范、语义图表、克制动效与统一浮层"
+  default_prompt: "使用 $fansai-branding-data-v2 按当前确认的视觉与数据表达规范设计 FansAI 页面。"

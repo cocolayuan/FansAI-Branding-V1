@@ -1,0 +1,19 @@
+/* Shared primary heading. Secondary headers never contain this component. */
+.fansai-mobile-scope .fh-primary-title{--fh-title-scale:1;display:flex;align-items:center;gap:calc(4px * var(--fh-title-scale));width:100%;min-width:0;height:56px;font-family:geistSans,-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#4beaff;font-weight:700;text-align:left;white-space:nowrap}
+.fansai-mobile-scope .fh-primary-title .fh-title-text{display:block;flex:0 0 auto;color:#4beaff;font-family:inherit;font-size:calc(43px * var(--fh-title-scale));font-weight:700;line-height:1.3;letter-spacing:calc(-.3px * var(--fh-title-scale));white-space:nowrap}
+.fansai-mobile-scope .fh-logo-box{position:relative;display:block;flex:0 0 auto;width:calc(38px * var(--fh-title-scale));height:calc(38px * var(--fh-title-scale))}
+.fansai-mobile-scope .fh-logo-scaler{position:relative;display:block;width:38px;height:38px;transform:scale(var(--fh-title-scale));transform-origin:left top}
+.fansai-mobile-scope .fh-logo-image{display:block;position:absolute;left:0;top:0;width:38px;height:38px;min-width:38px;max-width:none;object-fit:contain;aspect-ratio:1;border:0;border-radius:0;filter:none;opacity:1;pointer-events:none;user-select:none}
+.fansai-mobile-scope .fh-title-dot{position:absolute;display:block;left:0;bottom:0;width:7px;height:7px;background:#fff;border:0;border-radius:0}
+.fansai-mobile-scope .hd:has(.fh-primary-title){background:#000;backdrop-filter:none;padding-top:30px;padding-bottom:24px;position:relative;top:auto}
+.fansai-mobile-scope .hd:has(.fh-primary-title) .t{flex:1 1 0%;min-width:0}
+.fansai-mobile-scope .hd:has(.fh-primary-title) .ttl{display:block;width:100%;min-width:0;height:56px;margin:0;padding:0;line-height:56px}
+.fansai-mobile-scope .hd:has(.fh-primary-title) .av{flex-shrink:0}
+.fansai-mobile-scope #v-ops .gx-intro h1:has(.fh-primary-title){flex:1 1 0%;min-width:0;height:56px;margin:0;padding:0;line-height:56px}
+.fansai-mobile-scope #v-ops .gx-intro:has(.fh-primary-title) .gx-filter{flex-shrink:0}
+/* Retain Decision's existing grayscale content while letting only its new
+   primary title display cyan. Other tabs, secondary pages and sheets keep their
+   original filter boundary. */
+.fansai-mobile-scope.page-grayscale:has(#v-appr:not([hidden]))>.app{filter:none}
+.fansai-mobile-scope.page-grayscale:has(#v-appr:not([hidden]))>.app>main:not(:has(.fs-tab-skeleton)),
+.fansai-mobile-scope.page-grayscale:has(#v-appr:not([hidden]))>.app>.hd>.av{filter:grayscale(1)}

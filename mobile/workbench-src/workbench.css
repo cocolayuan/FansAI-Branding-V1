@@ -1,0 +1,61 @@
+/* Workbench home only. Existing secondary pages and other tabs keep their CSS. */
+.fansai-mobile-scope:has(#v-more:not([hidden])){background:#000!important;background-image:none!important}
+.fansai-mobile-scope:has(#v-more:not([hidden]))>.app,
+.fansai-mobile-scope:has(#v-more:not([hidden]))>.sheet{filter:none}
+.fansai-mobile-scope:has(#v-more:not([hidden])) .hd{position:relative;top:auto;padding-top:30px;padding-bottom:24px;background:#000;backdrop-filter:none}
+.fansai-mobile-scope:has(#v-more:not([hidden])) .hd .ttl{font-family:geistSans,-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:clamp(32px,10vw,43px);font-weight:700;line-height:1.3;letter-spacing:-.4px;color:#4beaff}
+#v-more .wb-workbench{display:flex;flex-direction:column;gap:44px;margin-top:12px;padding-bottom:8px;color:#e9f3f6;font-family:geistSans,-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-weight:450}
+#v-more .wb-workbench *{box-sizing:border-box}
+#v-more .wb-section{min-width:0;margin:0;padding:0;border:0}
+#v-more .wb-section-head{margin:0 2px 16px}
+#v-more .wb-section-head h2{margin:0;color:#e2eff3;font-size:18px;line-height:1.4;letter-spacing:-.15px;font-weight:500}
+#v-more .wb-section-head p{margin:7px 0 0;color:#7f98a4;font-size:11px;line-height:1.65;font-weight:450;overflow-wrap:anywhere}
+#v-more .wb-section-head.is-shared{margin:0 2px 22px}
+#v-more .wb-section-head.is-shared h2{font-size:26px;line-height:1.2;font-weight:650;letter-spacing:-.65px}
+#v-more .wb-group{min-width:0;margin:0 0 28px;padding:22px 16px 20px;border:0;border-radius:24px;background:#0a161b;box-shadow:none}
+#v-more .wb-group:last-child{margin-bottom:0}
+#v-more .wb-group-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 12px;margin:0 0 19px;padding:0 1px}
+#v-more .wb-group-head h3{margin:0;color:#d9e7ec;font-size:15px;line-height:1.45;font-weight:650;letter-spacing:0}
+#v-more .wb-group-head small{min-width:0;color:#78929e;font-size:11px;line-height:1.5;font-weight:450;overflow-wrap:anywhere}
+#v-more .wb-entries{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;align-items:stretch;min-width:0}
+#v-more .wb-entries:has(>.wb-entry:nth-child(2):last-child){grid-template-columns:repeat(2,minmax(0,1fr))}
+#v-more .wb-entries:has(>.wb-entry:nth-child(3):last-child){grid-template-columns:repeat(3,minmax(0,1fr))}
+#v-more .wb-group[data-group="知识分类"] .wb-entries{grid-template-columns:repeat(2,minmax(0,1fr))}
+#v-more .wb-entry{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;min-width:0;min-height:112px;margin:0;padding:10px 4px;border:0;border-radius:18px;background:#000;color:#dcebf0;text-align:center;font:inherit;cursor:pointer;appearance:none;box-shadow:none;text-decoration:none;-webkit-tap-highlight-color:transparent;transition:background-color 180ms,color 180ms,transform 180ms}
+#v-more .wb-icon-stage{position:relative;display:flex;align-items:center;justify-content:center;width:100%;max-width:88px;aspect-ratio:1;flex:none;min-width:0;background:#000;border:0;border-radius:16px;overflow:hidden}
+#v-more .wb-icon-image{display:block;width:100%;height:100%;aspect-ratio:auto;object-fit:contain;object-position:center;opacity:1;border:0;border-radius:0;filter:none;mix-blend-mode:normal;pointer-events:none;user-select:none;-webkit-user-drag:none}
+#v-more .wb-entry-label{display:block;max-width:100%;min-height:30px;color:inherit;font-size:12px;line-height:1.4;font-weight:500;letter-spacing:-.12px;white-space:normal;overflow-wrap:anywhere;text-wrap:balance}
+#v-more .wb-entry-status{position:absolute;z-index:1;top:8px;right:8px;display:block;max-width:calc(100% - 16px);padding:3px 6px;border-radius:6px;background:#18313a;color:#addfe6;font-size:9px;line-height:1.4;font-weight:500;white-space:normal}
+#v-more .wb-entry.is-unavailable{cursor:default;color:#a9bdc7}
+#v-more .wb-entry.is-unavailable .wb-icon-image{opacity:1;filter:none}
+#v-more .wb-entry.is-functional{min-height:92px;padding:14px 5px 12px;gap:10px;background:#14282f;border-radius:18px}
+#v-more .wb-entry.is-functional .wb-icon-stage,
+#v-more .wb-entry.is-functional .wb-functional-icon{display:grid;place-items:center;width:36px;height:36px;max-width:36px;aspect-ratio:1;border-radius:11px;background:#213b44;color:#9bc8d8;flex:none}
+#v-more .wb-entry.is-functional svg{display:block;width:22px;height:22px;color:inherit;flex:none}
+#v-more .wb-entry.is-functional>.wb-icon-stage+ .wb-entry-label,
+#v-more .wb-entry.is-functional .wb-entry-label{min-height:17px}
+#v-more .wb-entry.is-functional.is-unavailable{background:#0e1e24}
+#v-more .wb-entry:focus-visible{outline:2px solid #7cecf4;outline-offset:3px}
+#v-more .wb-entry:active{transform:scale(.96)}
+#v-more .wb-entry:disabled{cursor:default}
+#v-more .wb-entry.is-unavailable:active,#v-more .wb-entry:disabled:active{transform:none}
+@media(hover:hover){#v-more .wb-entry.is-functional:not(.is-unavailable):not(:disabled):hover{background:#1b343e;color:#f1fafc}#v-more .wb-entry.is-glass:not(.is-unavailable):not(:disabled):hover .wb-entry-label{color:#a9eeeb}}
+@media(max-width:350px){
+  #v-more .wb-group{padding:20px 14px;border-radius:22px}
+  #v-more .wb-entries{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  #v-more .wb-entry{padding:9px 2px;min-height:112px;border-radius:16px;gap:6px}
+  #v-more .wb-entry-label{font-size:11px;line-height:1.45;min-height:30px;letter-spacing:-.12px}
+  #v-more .wb-entry-status{font-size:10.5px}
+  #v-more .wb-group-head{gap:5px 8px}
+  #v-more .wb-group-head h3{font-size:14px}
+  #v-more .wb-entry.is-functional{min-height:92px;padding:12px 2px}
+}
+@media(min-width:440px){#v-more .wb-entry.is-glass{min-height:126px;padding-top:11px;padding-bottom:11px}#v-more .wb-entry-label{font-size:12px}}
+/* Business and Growth use a square image tile with a separate caption.
+   Internal-project cards keep their image and caption on one black surface. */
+#v-more .wb-group[data-group="客户业务"] .wb-entries,
+#v-more .wb-group[data-group="产品增长"] .wb-entries{gap:18px 12px}
+#v-more .wb-entry.is-separated{justify-content:flex-start;gap:10px;min-height:0;padding:0;border-radius:14px;background:transparent}
+#v-more .wb-entry.is-separated .wb-icon-stage{width:100%;max-width:none;border-radius:16px;overflow:hidden}
+#v-more .wb-entry.is-separated .wb-entry-label{min-height:30px;padding:0 1px;color:#b8cdd6;font-size:11px;font-weight:450;line-height:1.45;letter-spacing:0}
+@media(prefers-reduced-motion:reduce){#v-more .wb-entry{transition:none}#v-more .wb-entry:active{transform:none}}
